@@ -1,0 +1,9 @@
+<span class="add-card">
+  <input type="text" required minlength="4" maxlength="150" size="50" [(ngModel)]="text" />
+  <button
+    [disabled]="text.trim().length === 0"
+    [class]="{ 'add-card_btn--active': text.trim().length > 0, 'add-card_btn': true }"
+    (click)="onClick()">
+    📝
+  </button>
+</span>

@@ -1,0 +1,17 @@
+.add-card {
+  display: flex;
+
+  > input {
+    width: 80%;
+  }
+}
+
+.add-card_btn {
+  width: 20%;
+  background-color: slategray;
+  opacity: 50%;
+}
+
+.add-card_btn--active {
+  opacity: 100%;
+}
