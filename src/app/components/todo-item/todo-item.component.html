@@ -1,6 +1,6 @@
 <div class="todo_item">
   <div class="todo_item_text">
-    <p>{{ todo.text }}</p>
+    <p>{{ todo.id }} . {{ todo.text }}</p>
   </div>
-  <button (click)="onItemDelete(todo.id)">🗑️</button>
+  <app-button (click)="onItemDelete(todo.id)">🗑️</app-button>
 </div>

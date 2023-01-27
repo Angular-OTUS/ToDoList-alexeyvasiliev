@@ -3,8 +3,8 @@
   <app-todo-add-form (newItemEvent)="onItemAdd($event)"></app-todo-add-form>
   <ul *ngIf="!isLoading" class="todo-card_list">
     <li *ngFor="let item of items" class="todo-card_list_item">
-      <app-todo-item [todo]="item" (removeItem)="onItemRemove($event)"> </app-todo-item>
+      <app-todo-item [todo]="item" (removeItem)="onItemRemove($event)"></app-todo-item>
     </li>
   </ul>
-  <span *ngIf="isLoading" class="loader"></span>
+  <app-loader *ngIf="isLoading"></app-loader>
 </div>
