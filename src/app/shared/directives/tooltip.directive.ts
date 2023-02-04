@@ -65,12 +65,12 @@ export class TooltipDirective implements OnDestroy {
         }
         case TooltipPosition.RIGHT: {
           this.componentRef.instance.left = Math.round(right);
-          this.componentRef.instance.top = Math.round(top + (bottom - top) / 2);
+          this.componentRef.instance.top = Math.round(top + (bottom - top) / 2) - 20;
           break;
         }
         case TooltipPosition.LEFT: {
           this.componentRef.instance.left = Math.round(left);
-          this.componentRef.instance.top = Math.round(top + (bottom - top) / 2);
+          this.componentRef.instance.top = Math.round(top + (bottom - top) / 2) - 20;
           break;
         }
         default: {
