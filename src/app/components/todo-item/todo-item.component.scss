@@ -6,6 +6,10 @@
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
+.selected {
+  background-color: rgba(234, 224, 184, 0.66);
+}
+
 .todo_item_text {
   width: 80%;
   padding: 0 5px 0 5px;

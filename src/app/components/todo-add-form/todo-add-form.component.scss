@@ -1,9 +1,17 @@
 .add-card {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
-  > input {
-    width: 80%;
+  > div {
+    margin: 2px;
   }
+}
+
+.add-tittle {
+  width: 80%;
+  height: 1rem;
 }
 
 .add-card_btn {
@@ -15,4 +23,10 @@
 
 .add-card_btn--active {
   opacity: 100%;
+}
+
+.add-description {
+  width: 90%;
+  height: 5rem;
+  resize: none;
 }
