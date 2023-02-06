@@ -19,16 +19,11 @@ export class TodoItemComponent {
     return this.selectedItemId != null;
   }
 
-  @Output()
-  private removeItem = new EventEmitter<number>();
+  @Output() removeItem = new EventEmitter<number>();
 
-  onItemDelete(id: number) {
-    this.removeItem.emit(id);
-  }
+  onItemDelete = (id: number) => this.removeItem.emit(id);
 
-  onSelectedClick(id: number) {
-    this.selectedItemId = id;
-  }
+  onSelectedClick = (id: number) => (this.selectedItemId = id);
 
   @HostListener('mouseleave')
   mouseleave() {

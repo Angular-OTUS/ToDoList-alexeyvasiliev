@@ -5,6 +5,7 @@ import {
   ElementRef,
   EmbeddedViewRef,
   HostListener,
+  inject,
   Input,
   OnDestroy,
   ViewContainerRef,
@@ -19,58 +20,48 @@ export class TooltipDirective implements OnDestroy {
   @Input() tooltip = '';
   @Input() position: TooltipPosition = TooltipPosition.BELOW;
 
-  private componentRef: ComponentRef<TooltipComponent> | null = null;
+  #componentRef: ComponentRef<TooltipComponent> | null = null;
+  #elementRef = inject(ElementRef);
+  #appRef = inject(ApplicationRef);
+  #viewContainerRef = inject(ViewContainerRef);
 
-  constructor(
-    private elementRef: ElementRef,
-    private appRef: ApplicationRef,
-    private viewContainerRef: ViewContainerRef
-  ) {}
-
-  @HostListener('mouseenter')
-  onMouseEnter(): void {
-    this.initializeTooltip();
-  }
-
-  @HostListener('mouseleave')
-  onMouseLeave(): void {
-    this.destroy();
-  }
+  @HostListener('mouseenter') onMouseEnter = (): void => this.initializeTooltip();
+  @HostListener('mouseleave') onMouseLeave = (): void => this.destroy();
 
   private initializeTooltip() {
-    if (this.componentRef === null) {
-      this.componentRef = this.viewContainerRef.createComponent(TooltipComponent);
-      const [tooltipDOMElement] = (this.componentRef.hostView as EmbeddedViewRef<TooltipComponent>).rootNodes;
+    if (this.#componentRef === null) {
+      this.#componentRef = this.#viewContainerRef.createComponent(TooltipComponent);
+      const [tooltipDOMElement] = (this.#componentRef.hostView as EmbeddedViewRef<TooltipComponent>).rootNodes;
       this.setTooltipComponentProperties();
       document.body.appendChild(tooltipDOMElement);
     }
   }
 
   private setTooltipComponentProperties() {
-    if (this.componentRef !== null) {
-      this.componentRef.instance.tooltip = this.tooltip;
+    if (this.#componentRef !== null) {
+      this.#componentRef.instance.tooltip = this.tooltip;
 
-      const { left, right, top, bottom } = this.elementRef.nativeElement.getBoundingClientRect();
+      const { left, right, top, bottom } = this.#elementRef.nativeElement.getBoundingClientRect();
 
       switch (this.position) {
         case TooltipPosition.BELOW: {
-          this.componentRef.instance.left = Math.round((right - left) / 2 + left);
-          this.componentRef.instance.top = Math.round(bottom);
+          this.#componentRef.instance.left = Math.round((right - left) / 2 + left);
+          this.#componentRef.instance.top = Math.round(bottom);
           break;
         }
         case TooltipPosition.ABOVE: {
-          this.componentRef.instance.left = Math.round((right - left) / 2 + left);
-          this.componentRef.instance.top = Math.round(top);
+          this.#componentRef.instance.left = Math.round((right - left) / 2 + left);
+          this.#componentRef.instance.top = Math.round(top);
           break;
         }
         case TooltipPosition.RIGHT: {
-          this.componentRef.instance.left = Math.round(right);
-          this.componentRef.instance.top = Math.round(top + (bottom - top) / 2) - 20;
+          this.#componentRef.instance.left = Math.round(right);
+          this.#componentRef.instance.top = Math.round(top + (bottom - top) / 2) - 20;
           break;
         }
         case TooltipPosition.LEFT: {
-          this.componentRef.instance.left = Math.round(left);
-          this.componentRef.instance.top = Math.round(top + (bottom - top) / 2) - 20;
+          this.#componentRef.instance.left = Math.round(left);
+          this.#componentRef.instance.top = Math.round(top + (bottom - top) / 2) - 20;
           break;
         }
         default: {
@@ -85,10 +76,10 @@ export class TooltipDirective implements OnDestroy {
   }
 
   destroy(): void {
-    if (this.componentRef !== null) {
-      this.appRef.detachView(this.componentRef.hostView);
-      this.componentRef.destroy();
-      this.componentRef = null;
+    if (this.#componentRef !== null) {
+      this.#appRef.detachView(this.#componentRef.hostView);
+      this.#componentRef.destroy();
+      this.#componentRef = null;
     }
   }
 }
