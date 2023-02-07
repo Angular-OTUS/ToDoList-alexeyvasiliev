@@ -10,6 +10,8 @@ export class TodoListComponent implements OnInit {
   items: Todo[] = [];
   isLoading?: boolean;
 
+  selectedItemId?: number;
+
   ngOnInit(): void {
     this.isLoading = true;
     setTimeout(() => {
@@ -53,5 +55,9 @@ export class TodoListComponent implements OnInit {
         ? 1
         : this.items.reduce((prev, current) => (prev.id > current.id ? prev : current)).id + 1;
     this.items = [{ id, ...todoDraft }, ...this.items];
+  }
+
+  onItemSelected(selectedItemId: number) {
+    this.selectedItemId = selectedItemId;
   }
 }
