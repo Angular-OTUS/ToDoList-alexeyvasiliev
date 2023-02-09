@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Todo, TodoDraft } from '@interfaces/Todo';
+import { TodoStore } from '@services/todo-store.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -11,7 +12,10 @@ export class TodoListComponent implements OnInit {
   isLoading?: boolean;
 
   selectedItemId?: number;
+  editItemId?: number;
   selectedItemDesc?: string;
+
+  #store = inject(TodoStore);
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -21,43 +25,11 @@ export class TodoListComponent implements OnInit {
     }, 1000);
   }
 
-  #fetchData(): void {
-    this.items.push(
-      {
-        id: 1,
-        description: `- создание нового Angular проекта
-          - создание нового компонента
-          - добавление разметки в шаблон компонента',`,
-        text: 'Заготовка Angular проекта для приложения ToDo List',
-      },
-      {
-        id: 2,
-        description:
-          ' - создание нового компонента\n' +
-          '- связывание данных и событий с шаблоном компонента\n' +
-          '- включение одних компонентов в другие и передача данных между ними',
-        text: 'Работа с компонентами: привязка логики к шаблону и выделение частей в отдельные компоненты',
-      },
-      {
-        id: 3,
-        description:
-          '* использование методом жизненного цикла компонента.\n' +
-          '* создавать модули\n' +
-          '* декларировать и экспортировать компоненты в модуле\n' +
-          '* импортировать один модуль в другой',
-        text: 'Добавляем анимацию загрузки (имитируем подгрузку данных с бекэнда). Используем shared модуль',
-      },
-      {
-        id: 4,
-        description: `* использование стандартных атрибутивных и структурных директив
-* создание пользовательских директив`,
-        text: 'Список задач с описаниями, предпросмотр описания элемента списка. Всплывающие подсказки',
-      }
-    );
-  }
-
   onItemRemove(id: number) {
-    this.items = this.items.filter(todo => todo.id !== id);
+    if (!this.#store.removeTodo(id)) {
+      return;
+    }
+    this.#fetchData();
     if (id === this.selectedItemId) {
       this.selectedItemId = undefined;
       this.selectedItemDesc = undefined;
@@ -65,17 +37,22 @@ export class TodoListComponent implements OnInit {
   }
 
   onItemAdd(todoDraft: TodoDraft) {
-    const id =
-      this.items.length === 0
-        ? 1
-        : this.items.reduce((prev, current) => (prev.id > current.id ? prev : current)).id + 1;
-    this.items = [{ id, ...todoDraft }, ...this.items];
+    this.#store.addTodo(todoDraft);
+    this.#fetchData();
   }
 
   onItemSelected(selectedItemId: number) {
     this.selectedItemId = selectedItemId;
     this.selectedItemDesc = this.items.filter(item => item.id === selectedItemId).at(0)?.description;
-    //this.selectedItemDesc = '1111';
-    console.log(this.selectedItemDesc);
+  }
+
+  #fetchData = () => (this.items = this.#store.getAll());
+
+  onItemEdit(selectedItemId: number) {
+    this.editItemId = selectedItemId;
+  }
+
+  resetItemEdit() {
+    this.editItemId = undefined;
   }
 }

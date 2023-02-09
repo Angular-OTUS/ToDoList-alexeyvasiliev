@@ -11,6 +11,7 @@ export class TodoItemComponent {
   @Input() todo!: Todo;
   @Output() ItemRemove = new EventEmitter<number>();
   @Output() ItemSelect = new EventEmitter<number>();
+  @Output() ItemEdit = new EventEmitter<number>();
   @Input() selectedItemId?: number;
   TooltipPosition: typeof TooltipPosition = TooltipPosition;
 
@@ -20,4 +21,8 @@ export class TodoItemComponent {
   }
   onItemDelete = (id: number) => this.ItemRemove.emit(id);
   onSelectedClick = (id: number) => this.ItemSelect.emit(id);
+
+  onDblClick(id: number) {
+    this.ItemEdit.emit(id);
+  }
 }

@@ -16,6 +16,7 @@
         "plugin:prettier/recommended"
       ],
       "rules": {
+        "no-console": "error",
         "comma-dangle": "off",
         "@typescript-eslint/comma-dangle": ["error", "only-multiline"],
         "@angular-eslint/directive-selector": [

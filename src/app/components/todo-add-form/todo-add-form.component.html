@@ -10,7 +10,7 @@
       [(ngModel)]="text"
       placeholder="Задача" />
     <app-button
-      [disabled]="text.trim().length === 0"
+      [disabled]="isDisabled()"
       [class]="{ 'add-card_btn--active': text.trim().length > 0, 'add-card_btn': true }"
       (click)="onClick()"
       appTooltip
