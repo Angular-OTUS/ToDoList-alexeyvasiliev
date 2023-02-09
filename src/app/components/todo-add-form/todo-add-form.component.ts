@@ -22,7 +22,6 @@ export class TodoAddFormComponent {
     if (this.#isDisabled()) {
       return;
     }
-
     this.newItemEvent.emit({ text: this.text, description: this.description });
     this.text = '';
     this.description = '';

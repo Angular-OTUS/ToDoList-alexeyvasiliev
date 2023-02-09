@@ -17,17 +17,7 @@
       ],
       "rules": {
         "comma-dangle": "off",
-        "@typescript-eslint/comma-dangle": [
-          "error",
-          {
-            "arrays": "never",
-            "objects": "always-multiline",
-            "imports": "always-multiline",
-            "exports": "never",
-            "functions": "never",
-            "enums": "always-multiline"
-          }
-        ],
+        "@typescript-eslint/comma-dangle": ["error", "only-multiline"],
         "@angular-eslint/directive-selector": [
           "error",
           {
