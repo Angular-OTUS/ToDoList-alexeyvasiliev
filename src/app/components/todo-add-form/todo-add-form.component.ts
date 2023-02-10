@@ -31,12 +31,11 @@ export class TodoAddFormComponent implements OnChanges {
   TooltipPosition: typeof TooltipPosition = TooltipPosition;
 
   #todoStore = inject(TodoStore);
-
-  constructor(private eRef: ElementRef) {}
+  #eRef = inject(ElementRef);
 
   @HostListener('document:click', ['$event'])
   clickOut(event: MouseEvent) {
-    if (!this.eRef.nativeElement.contains(event.target) && this.editTodoId) {
+    if (!this.#eRef.nativeElement.contains(event.target) && this.editTodoId) {
       const todo = this.#todoStore.getById(this.editTodoId);
       if (todo) {
         todo.text = this.text;

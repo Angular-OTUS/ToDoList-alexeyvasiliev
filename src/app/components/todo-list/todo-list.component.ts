@@ -29,7 +29,9 @@ export class TodoListComponent implements OnInit {
     if (!this.#store.removeTodo(id)) {
       return;
     }
+
     this.#fetchData();
+
     if (id === this.selectedItemId) {
       this.selectedItemId = undefined;
       this.selectedItemDesc = undefined;
@@ -38,6 +40,7 @@ export class TodoListComponent implements OnInit {
 
   onItemAdd(todoDraft: TodoDraft) {
     this.#store.addTodo(todoDraft);
+
     this.#fetchData();
   }
 
@@ -48,11 +51,7 @@ export class TodoListComponent implements OnInit {
 
   #fetchData = () => (this.items = this.#store.getAll());
 
-  onItemEdit(selectedItemId: number) {
-    this.editItemId = selectedItemId;
-  }
+  onItemEdit = (selectedItemId: number) => (this.editItemId = selectedItemId);
 
-  resetItemEdit() {
-    this.editItemId = undefined;
-  }
+  resetItemEdit = () => (this.editItemId = undefined);
 }
