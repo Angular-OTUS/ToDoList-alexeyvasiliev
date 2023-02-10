@@ -26,7 +26,6 @@ export class TodoStoreService extends TodoStore {
   removeTodo(id: number): boolean {
     const oldLength = this.#items.length;
     this.#items = this.#items.filter(todo => todo.id !== id);
-    this.#toastService.showToast('🗑️ Задача удалена');
 
     return oldLength != this.#items.length;
   }
@@ -36,7 +35,7 @@ export class TodoStoreService extends TodoStore {
       this.#items.length === 0
         ? 1
         : this.#items.reduce((prev, current) => (prev.id > current.id ? prev : current)).id + 1;
-    this.#toastService.showToast('✅ Задача добавлена');
+
     this.#items = [{ id, ...todoDraft }, ...this.#items];
   }
 
@@ -44,7 +43,6 @@ export class TodoStoreService extends TodoStore {
 
   save(todo: Todo): void {
     this.#items = this.#items.map(t => (t.id !== todo.id ? t : todo));
-    this.#toastService.showToast('✏️ Задача обновлена');
   }
 }
 
