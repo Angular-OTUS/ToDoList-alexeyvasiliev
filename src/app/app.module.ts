@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
 import { TodoStore, TodoStoreService } from '@services/index';
+import { APP_CONFIG, Configuration } from './config/appConfig';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,10 @@ import { TodoStore, TodoStoreService } from '@services/index';
     TodoToastComponent,
   ],
   imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, FormsModule, SharedModule],
-  providers: [{ provide: TodoStore, useClass: TodoStoreService }],
+  providers: [
+    { provide: TodoStore, useClass: TodoStoreService },
+    { provide: APP_CONFIG, useValue: Configuration },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
