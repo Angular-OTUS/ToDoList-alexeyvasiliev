@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
-import { TodoStore, TodoStoreService } from '@services/todo-store.service';
+import { TodoStore, TodoStoreService } from '@services/index';
 
 @NgModule({
   declarations: [
