@@ -13,6 +13,7 @@ import { TodoDraft } from '@interfaces/Todo';
 import { TooltipPosition } from '@shared/directives/tooltip.enums';
 import { TodoStore } from '@services/todo-store.service';
 import { TodoToastService } from '@services/todo-toast.service';
+import { ToastType } from '@interfaces/Toast';
 
 @Component({
   selector: 'app-todo-add-form',
@@ -41,7 +42,7 @@ export class TodoAddFormComponent implements OnChanges {
       if (todo) {
         todo.text = this.text;
         this.#todoStore.save(todo);
-        this.#toastService.showToast('✏️ Задача обновлена');
+        this.#toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
         this.resetItemEvent.emit();
       }
     }

@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Todo, TodoDraft } from '@interfaces/Todo';
 import { TodoStore } from '@services/todo-store.service';
 import { TodoToastService } from '@services/todo-toast.service';
+import { ToastType } from '@interfaces/Toast';
 
 @Component({
   selector: 'app-todo-list',
@@ -30,7 +31,7 @@ export class TodoListComponent implements OnInit {
     if (!this.#store.removeTodo(id)) {
       return;
     }
-    this.#toastService.showToast('🗑️ Задача удалена');
+    this.#toastService.showToast('🗑️ Задача удалена', ToastType.REMOVE);
     this.#fetchData();
 
     if (id === this.selectedItemId) {
@@ -41,7 +42,7 @@ export class TodoListComponent implements OnInit {
 
   onItemAdd(todoDraft: TodoDraft) {
     this.#store.addTodo(todoDraft);
-    this.#toastService.showToast('✅ Задача добавлена');
+    this.#toastService.showToast('✅ Задача добавлена', ToastType.ADD);
     this.#fetchData();
   }
 

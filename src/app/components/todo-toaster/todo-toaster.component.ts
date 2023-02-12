@@ -4,6 +4,7 @@ import { TodoToastComponent } from '@components/todo-toast/todo-toast.component'
 import { TodoToastService } from '@services/todo-toast.service';
 import { Subscription, timer } from 'rxjs';
 import { APP_CONFIG } from '../../config/appConfig';
+import { ToastType } from '@interfaces/Toast';
 
 @Component({
   selector: 'app-todo-toaster',
@@ -20,15 +21,16 @@ export class TodoToasterComponent implements OnDestroy {
   private destroySubscription$?: Subscription;
 
   constructor(private readonly toastServer: TodoToastService) {
-    this.subscription$ = toastServer.toastQueue$.subscribe(toast => this.#create(toast?.text));
+    this.subscription$ = toastServer.toastQueue$.subscribe(toast => this.#create(toast?.text, toast?.type));
   }
 
-  #create(message: string | undefined): void {
+  #create(message: string | undefined, type: ToastType = ToastType.ADD): void {
     if (!message) {
       return;
     }
     const componentRef = this.#viewContainerRef.createComponent(TodoToastComponent);
     componentRef.instance.text = message;
+    componentRef.instance.type = type;
     const [tooltipDOMElement] = (componentRef.hostView as EmbeddedViewRef<TooltipComponent>).rootNodes;
     this.#elementRef.nativeElement.appendChild(tooltipDOMElement);
     this.destroySubscription$ = timer(this.#appConfig.toastTimeOut).subscribe(_ => componentRef.destroy());
