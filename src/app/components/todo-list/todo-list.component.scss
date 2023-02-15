@@ -1,0 +1,14 @@
+.todo-card {
+  width: 20rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.todo-card_list {
+  padding: 0;
+  list-style-type: none;
+  width: 100%;
+}
+
+.todo-card_list_item {
+  box-sizing: border-box;
+}
