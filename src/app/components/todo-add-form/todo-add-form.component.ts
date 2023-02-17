@@ -11,12 +11,12 @@ export class TodoAddFormComponent {
 
   text = '';
 
-  #isDisabled(): boolean {
+  public isDisabled(): boolean {
     return this.text.trim().length === 0;
   }
 
   onClick() {
-    if (this.#isDisabled()) {
+    if (this.isDisabled()) {
       return;
     }
     this.newItemEvent.emit(this.text);
