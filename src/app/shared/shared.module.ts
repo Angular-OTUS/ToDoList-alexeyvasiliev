@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from './components/button/button.component';
-import { LoaderComponent } from './components/loader/loader.component';
-import { TooltipComponent } from './components/tooltip/tooltip.component';
+import { TooltipComponent, LoaderComponent, ButtonComponent } from '@shared/components';
 import { TooltipDirective } from './directives/tooltip.directive';
 
 @NgModule({
