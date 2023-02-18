@@ -14,12 +14,12 @@ export class TodoAddFormComponent {
   description = '';
   TooltipPosition: typeof TooltipPosition = TooltipPosition;
 
-  #isDisabled(): boolean {
+  public isDisabled(): boolean {
     return this.text.trim().length === 0;
   }
 
   onClick() {
-    if (this.#isDisabled()) {
+    if (this.isDisabled()) {
       return;
     }
     this.newItemEvent.emit({ text: this.text, description: this.description });
