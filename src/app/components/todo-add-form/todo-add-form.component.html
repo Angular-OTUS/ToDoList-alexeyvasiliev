@@ -1,25 +1,28 @@
-<span class="add-card" xmlns="http://www.w3.org/1999/html">
-  <div>
-    <input
-      class="add-tittle"
-      type="text"
-      required
-      minlength="4"
-      maxlength="150"
-      size="50"
-      [(ngModel)]="text"
-      placeholder="Задача" />
-    <app-button
-      [disabled]="isDisabled()"
-      [class]="{ 'add-card_btn--active': text.trim().length > 0, 'add-card_btn': true }"
-      (click)="onClick()"
-      appTooltip
-      tooltip="Добавить Задачу"
-      [position]="TooltipPosition.ABOVE">
-      📝
-    </app-button>
-  </div>
-  <div>
-    <textarea class="add-description" [(ngModel)]="description" placeholder="Описание"></textarea>
-  </div>
+<span class="add-card">
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div>
+      <input formControlName="todoTitle" class="add-tittle" type="text" placeholder="Задача" />
+
+      <app-button
+        type="submit"
+        [disabled]="isDisabled()"
+        [class]="{ 'add-card_btn--active': isDisabled(), 'add-card_btn': true }"
+        appTooltip
+        tooltip="Добавить Задачу"
+        [position]="TooltipPosition.ABOVE">
+        <ng-container class="btn-icon">📝</ng-container>
+      </app-button>
+
+      <div
+        class="alert alert-danger"
+        *ngIf="editForm.controls['todoTitle'].invalid && editForm.controls['todoTitle'].touched">
+        Не указано имя задачи
+      </div>
+    </div>
+    <textarea
+      name="todoDescription"
+      formControlName="todoDescription"
+      class="add-description"
+      placeholder="Описание"></textarea>
+  </form>
 </span>

@@ -13,10 +13,14 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
-import { TodoStore, TodoStoreService } from '@services/index';
+import { TodoStore } from '@services/index';
 import { APP_CONFIG, Configuration } from './config/appConfig';
+import { TodoRestStoreService } from '@services/todo-store.service';
+import { HttpClientModule } from '@angular/common/http';
+import { TodoFilterPanelComponent } from './components/todo-filter-panel/todo-filter-panel.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -28,10 +32,21 @@ import { APP_CONFIG, Configuration } from './config/appConfig';
     TodoDetailsComponent,
     TodoToasterComponent,
     TodoToastComponent,
+    TodoFilterPanelComponent,
   ],
-  imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, FormsModule, SharedModule],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    MatIconModule,
+    MatButtonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule,
+    HttpClientModule,
+    MatButtonToggleModule,
+  ],
   providers: [
-    { provide: TodoStore, useClass: TodoStoreService },
+    { provide: TodoStore, useClass: TodoRestStoreService },
     { provide: APP_CONFIG, useValue: Configuration },
   ],
   bootstrap: [AppComponent],

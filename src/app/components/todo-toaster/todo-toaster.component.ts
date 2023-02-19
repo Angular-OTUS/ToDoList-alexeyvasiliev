@@ -12,28 +12,28 @@ import { ToastType } from '@interfaces/Toast';
   styleUrls: ['./todo-toaster.component.scss'],
 })
 export class TodoToasterComponent implements OnDestroy {
-  readonly #elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
-  readonly #viewContainerRef = inject(ViewContainerRef);
-  readonly #appConfig = inject(APP_CONFIG);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly appConfig = inject(APP_CONFIG);
 
   private readonly subscription$: Subscription;
   private destroySubscription$?: Subscription;
 
   constructor(private readonly toastServer: TodoToastService) {
-    this.subscription$ = toastServer.toastQueue$.subscribe(toast => this.#create(toast?.text, toast?.type));
+    this.subscription$ = toastServer.toastQueue$.subscribe(toast => this.createToast(toast?.text, toast?.type));
   }
 
-  #create(message: string | undefined, type: ToastType = ToastType.ADD): void {
+  private createToast(message: string | undefined, type: ToastType = ToastType.ADD): void {
     if (!message) {
       return;
     }
-    const componentRef = this.#viewContainerRef.createComponent(TodoToastComponent);
+    const componentRef = this.viewContainerRef.createComponent(TodoToastComponent);
     componentRef.instance.text = message;
     componentRef.instance.type = type;
     const [tooltipDOMElement] = (componentRef.hostView as EmbeddedViewRef<TooltipComponent>).rootNodes;
-    this.#elementRef.nativeElement.appendChild(tooltipDOMElement);
-    this.destroySubscription$ = timer(this.#appConfig.toastTimeOut).subscribe(_ => componentRef.destroy());
+    this.elementRef.nativeElement.appendChild(tooltipDOMElement);
+    this.destroySubscription$ = timer(this.appConfig.toastTimeOut).subscribe(_ => componentRef.destroy());
   }
 
   ngOnDestroy(): void {

@@ -1,1 +1,4 @@
-<button [disabled]="disabled"><ng-content></ng-content></button>
+<button [disabled]="disabled">
+  <ng-content></ng-content>
+  <ng-content select=".btn-icon"></ng-content>
+</button>

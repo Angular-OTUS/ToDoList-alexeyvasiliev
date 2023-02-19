@@ -18,12 +18,12 @@ export class TodoToastComponent implements AfterViewInit, OnDestroy {
   type: ToastType = ToastType.ADD;
   private subscription$?: Subscription;
 
-  readonly #appConfig = inject(APP_CONFIG);
+  private readonly appConfig = inject(APP_CONFIG);
 
   end = true;
 
   ngAfterViewInit(): void {
-    this.subscription$ = timer(this.#appConfig.toastTimeOut / 10).subscribe(_ => (this.end = false));
+    this.subscription$ = timer(this.appConfig.toastTimeOut / 10).subscribe(_ => (this.end = false));
   }
 
   ngOnDestroy(): void {
