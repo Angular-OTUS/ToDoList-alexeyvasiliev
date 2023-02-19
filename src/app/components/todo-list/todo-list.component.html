@@ -5,13 +5,17 @@
       (newItemEvent)="onItemAdd($event)"
       [editTodoId]="editItemId"
       (resetItemEvent)="resetItemEdit()"></app-todo-add-form>
+
     <ul *ngIf="!isLoading" class="todo-card_list">
+      <app-todo-filter-panel (filterEmitter)="onFilterChange($event)"></app-todo-filter-panel>
+
       <li *ngFor="let item of items" class="todo-card_list_item">
         <app-todo-item
           [todo]="item"
           (ItemRemove)="onItemRemove($event)"
           (ItemSelect)="onItemSelected($event)"
           (ItemEdit)="onItemEdit($event)"
+          (ItemStatusChanged)="onItemStatusChanged($event)"
           [selectedItemId]="selectedItemId"></app-todo-item>
       </li>
     </ul>

@@ -9,11 +9,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { TodoDraft } from '@interfaces/Todo';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TooltipPosition } from '@shared/directives/tooltip.enums';
 import { TodoStore } from '@services/todo-store.service';
-import { TodoToastService } from '@services/todo-toast.service';
 import { ToastType } from '@interfaces/Toast';
+import { TodoToastService } from '@services/todo-toast.service';
+import { TodoDraft, TodoStatus } from '@interfaces/Todo';
 
 @Component({
   selector: 'app-todo-add-form',
@@ -21,50 +22,64 @@ import { ToastType } from '@interfaces/Toast';
   styleUrls: ['./todo-add-form.component.scss'],
 })
 export class TodoAddFormComponent implements OnChanges {
-  @Output() private newItemEvent = new EventEmitter<TodoDraft>();
-
-  @Output() private resetItemEvent = new EventEmitter<number>();
-
   @Input()
   editTodoId?: number;
-
-  text = '';
-  description = '';
-  TooltipPosition: typeof TooltipPosition = TooltipPosition;
-
+  @Output() private resetItemEvent = new EventEmitter<number>();
+  @Output() private newItemEvent = new EventEmitter<TodoDraft>();
   #todoStore = inject(TodoStore);
   #eRef = inject(ElementRef);
   #toastService = inject(TodoToastService);
-  @HostListener('document:click', ['$event'])
-  clickOut(event: MouseEvent) {
-    if (!this.#eRef.nativeElement.contains(event.target) && this.editTodoId) {
-      const todo = this.#todoStore.getById(this.editTodoId);
-      if (todo) {
-        todo.text = this.text;
-        this.#todoStore.save(todo);
-        this.#toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
-        this.resetItemEvent.emit();
-      }
-    }
-  }
+  TooltipPosition: typeof TooltipPosition = TooltipPosition;
+  private todoTitle = new FormControl<string>('', Validators.required);
+  private todoDescription = new FormControl<string>('');
+  editForm = new FormGroup({
+    todoTitle: this.todoTitle,
+    todoDescription: this.todoDescription,
+  });
 
   isDisabled = (): boolean => {
     if (this.editTodoId) {
       return true;
     }
-    return this.text.trim().length === 0;
+    return this.todoTitle.value?.trim().length === 0;
   };
 
-  onClick() {
-    if (this.isDisabled()) {
+  @HostListener('document:click', ['$event'])
+  clickOut(event: MouseEvent) {
+    if (!this.#eRef.nativeElement.contains(event.target) && this.editTodoId) {
+      this.#todoStore.getById(this.editTodoId).subscribe(data => {
+        if (data && this.todoTitle.value) {
+          data.text = this.todoTitle.value;
+          data.description = this.todoDescription.value || undefined;
+          this.#todoStore.save(data);
+          this.#toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
+          this.resetItemEvent.emit();
+          this.editForm.reset();
+        }
+      });
+    }
+  }
+
+  onSubmit(): void {
+    if (this.isDisabled() || !this.todoTitle.value) {
       return;
     }
-    this.newItemEvent.emit({ text: this.text, description: this.description });
-    this.text = '';
-    this.description = '';
+    this.newItemEvent.emit({
+      text: this.todoTitle.value,
+      description: this.todoDescription.value || undefined,
+      status: TodoStatus.InProgress,
+    });
+    this.editForm.reset();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.text = this.#todoStore.getById(+changes['editTodoId'].currentValue)?.text || '';
+    if (changes['editTodoId'].currentValue) {
+      this.#todoStore.getById(+changes['editTodoId'].currentValue).subscribe(data =>
+        this.editForm.setValue({
+          todoTitle: data?.text || '',
+          todoDescription: data?.description || '',
+        })
+      );
+    }
   }
 }
