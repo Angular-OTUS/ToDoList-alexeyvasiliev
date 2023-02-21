@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "otus_angular": {
+    "ToDoList-alexeyvasiliev": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/otus_angular",
+            "outputPath": "dist/ToDoList-alexeyvasiliev",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -58,10 +58,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "otus_angular:build:production"
+              "browserTarget": "ToDoList-alexeyvasiliev:build:production"
             },
             "development": {
-              "browserTarget": "otus_angular:build:development"
+              "browserTarget": "ToDoList-alexeyvasiliev:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -69,7 +69,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "otus_angular:build"
+            "browserTarget": "ToDoList-alexeyvasiliev:build"
           }
         },
         "test": {

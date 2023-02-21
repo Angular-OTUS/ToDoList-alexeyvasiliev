@@ -8,9 +8,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
+import { TodoDetailsComponent } from '@components/todo-details/todo-details.component';
 
 @NgModule({
-  declarations: [AppComponent, TodoListComponent, TodoItemComponent, TodoHeaderComponent, TodoAddFormComponent],
+  declarations: [
+    AppComponent,
+    TodoListComponent,
+    TodoItemComponent,
+    TodoHeaderComponent,
+    TodoAddFormComponent,
+    TodoDetailsComponent,
+  ],
   imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, FormsModule, SharedModule],
   providers: [],
   bootstrap: [AppComponent],

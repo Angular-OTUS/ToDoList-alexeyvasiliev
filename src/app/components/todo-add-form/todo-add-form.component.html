@@ -1,8 +1,26 @@
-<span class="add-card">
-  <input type="text" required minlength="4" maxlength="150" size="50" [(ngModel)]="text"/>
-  <app-button
-    [disabled]="isDisabled()"
-    [class.add-card_btn--active]="!isDisabled()"
-    (click)="onClick()"> 📝
-  </app-button>
+<span class="add-card" xmlns="http://www.w3.org/1999/html">
+  <div>
+    <input
+      class="add-tittle"
+      type="text"
+      required
+      minlength="4"
+      maxlength="150"
+      size="50"
+      [(ngModel)]="text"
+      placeholder="Задача" />
+    <app-button
+      [disabled]="isDisabled()"
+      class="add-card_btn"
+      [class.add-card_btn--active]="!isDisabled()"
+      (click)="onClick()"
+      appTooltip
+      tooltip="Добавить Задачу"
+      [position]="TooltipPosition.ABOVE">
+      📝
+    </app-button>
+  </div>
+  <div>
+    <textarea class="add-description" [(ngModel)]="description" placeholder="Описание"></textarea>
+  </div>
 </span>

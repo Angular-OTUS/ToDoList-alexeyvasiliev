@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { Todo } from '@interfaces/Todo';
+import { TooltipPosition } from '@shared/directives/tooltip.enums';
 
 @Component({
   selector: 'app-todo-item',
@@ -7,13 +8,16 @@ import { Todo } from '@interfaces/Todo';
   styleUrls: ['./todo-item.component.scss'],
 })
 export class TodoItemComponent {
-  @Input()
-  todo!: Todo;
+  @Input() todo!: Todo;
+  @Output() ItemRemove = new EventEmitter<number>();
+  @Output() ItemSelect = new EventEmitter<number>();
+  @Input() selectedItemId?: number;
+  TooltipPosition: typeof TooltipPosition = TooltipPosition;
 
-  @Output()
-  private removeItem = new EventEmitter<number>();
-
-  onItemDelete(id: number) {
-    this.removeItem.emit(id);
+  @HostBinding('style.selected')
+  get isSelected() {
+    return this.todo.id === this.selectedItemId;
   }
+  onItemDelete = (id: number) => this.ItemRemove.emit(id);
+  onSelectedClick = (id: number) => this.ItemSelect.emit(id);
 }

@@ -1,3 +1,8 @@
+.todo-layout {
+  display: flex;
+  flex-direction: row;
+}
+
 .todo-card {
   width: 20rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
