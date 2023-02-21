@@ -13,7 +13,7 @@ import { TodoDraft } from '@interfaces/Todo';
 import { TooltipPosition } from '@shared/directives/tooltip/tooltip.enums';
 import { TodoStore } from '@services/todo-store.service';
 import { ToastService } from '@shared/services/toast.service';
-import { ToastType } from '@interfaces/Toast';
+import { ToastType } from '@shared/interfaces/Toast';
 
 @Component({
   selector: 'app-todo-add-form',

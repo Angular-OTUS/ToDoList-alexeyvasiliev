@@ -3,7 +3,7 @@ import { TooltipComponent } from '@shared/components/tooltip/tooltip.component';
 import { ToastService } from '@shared/services/toast.service';
 import { Subscription, timer } from 'rxjs';
 import { APP_CONFIG } from '../../../config/appConfig';
-import { ToastType } from '@interfaces/Toast';
+import { ToastType } from '@shared/interfaces/Toast';
 import { ToastComponent } from '@shared/components';
 
 @Component({
