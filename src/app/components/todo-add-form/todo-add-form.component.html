@@ -11,7 +11,8 @@
       placeholder="Задача" />
     <app-button
       [disabled]="isDisabled()"
-      [class]="{ 'add-card_btn--active': text.trim().length > 0, 'add-card_btn': true }"
+      class="add-card_btn"
+      [class.add-card_btn--active]="!isDisabled()"
       (click)="onClick()"
       appTooltip
       tooltip="Добавить Задачу"

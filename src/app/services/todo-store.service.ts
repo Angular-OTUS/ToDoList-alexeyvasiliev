@@ -1,7 +1,4 @@
 import { Todo, TodoDraft } from '@interfaces/Todo';
-import { inject } from '@angular/core';
-import { TodoToastService } from '@services/todo-toast.service';
-
 export abstract class TodoStore {
   abstract getAll(): Todo[];
 
@@ -15,34 +12,32 @@ export abstract class TodoStore {
 }
 
 export class TodoStoreService extends TodoStore {
-  #items: Todo[] = [...initialTodos];
-
-  #toastService = inject(TodoToastService);
+  private items: Todo[] = [...initialTodos];
 
   getAll(): Todo[] {
-    return this.#items;
+    return this.items;
   }
 
   removeTodo(id: number): boolean {
-    const oldLength = this.#items.length;
-    this.#items = this.#items.filter(todo => todo.id !== id);
+    const oldLength = this.items.length;
+    this.items = this.items.filter(todo => todo.id !== id);
 
-    return oldLength != this.#items.length;
+    return oldLength != this.items.length;
   }
 
   addTodo(todoDraft: TodoDraft) {
     const id =
-      this.#items.length === 0
+      this.items.length === 0
         ? 1
-        : this.#items.reduce((prev, current) => (prev.id > current.id ? prev : current)).id + 1;
+        : this.items.reduce((prev, current) => (prev.id > current.id ? prev : current)).id + 1;
 
-    this.#items = [{ id, ...todoDraft }, ...this.#items];
+    this.items = [{ id, ...todoDraft }, ...this.items];
   }
 
-  getById = (id: number): Todo | undefined => this.#items.find(t => t.id === id);
+  getById = (id: number): Todo | undefined => this.items.find(t => t.id === id);
 
   save(todo: Todo): void {
-    this.#items = this.#items.map(t => (t.id !== todo.id ? t : todo));
+    this.items = this.items.map(t => (t.id !== todo.id ? t : todo));
   }
 }
 

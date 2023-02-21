@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Todo, TodoDraft } from '@interfaces/Todo';
 import { TodoStore } from '@services/todo-store.service';
-import { TodoToastService } from '@services/todo-toast.service';
+import { ToastService } from '@shared/services/toast.service';
 import { ToastType } from '@interfaces/Toast';
 
 @Component({
@@ -12,27 +12,27 @@ import { ToastType } from '@interfaces/Toast';
 export class TodoListComponent implements OnInit {
   items: Todo[] = [];
   isLoading?: boolean;
-
   selectedItemId?: number;
   editItemId?: number;
   selectedItemDesc?: string;
 
-  #store = inject(TodoStore);
-  #toastService = inject(TodoToastService);
+  private readonly store = inject(TodoStore);
+  private readonly toastService = inject(ToastService);
+
   ngOnInit(): void {
     this.isLoading = true;
     setTimeout(() => {
-      this.#fetchData();
+      this.fetchData();
       this.isLoading = false;
     }, 1000);
   }
 
   onItemRemove(id: number) {
-    if (!this.#store.removeTodo(id)) {
+    if (!this.store.removeTodo(id)) {
       return;
     }
-    this.#toastService.showToast('🗑️ Задача удалена', ToastType.REMOVE);
-    this.#fetchData();
+    this.toastService.showToast('🗑️ Задача удалена', ToastType.REMOVE);
+    this.fetchData();
 
     if (id === this.selectedItemId) {
       this.selectedItemId = undefined;
@@ -41,9 +41,9 @@ export class TodoListComponent implements OnInit {
   }
 
   onItemAdd(todoDraft: TodoDraft) {
-    this.#store.addTodo(todoDraft);
-    this.#toastService.showToast('✅ Задача добавлена', ToastType.ADD);
-    this.#fetchData();
+    this.store.addTodo(todoDraft);
+    this.toastService.showToast('✅ Задача добавлена', ToastType.ADD);
+    this.fetchData();
   }
 
   onItemSelected(selectedItemId: number) {
@@ -51,7 +51,7 @@ export class TodoListComponent implements OnInit {
     this.selectedItemDesc = this.items.filter(item => item.id === selectedItemId).at(0)?.description;
   }
 
-  #fetchData = () => (this.items = this.#store.getAll());
+  private fetchData = () => (this.items = this.store.getAll());
 
   onItemEdit = (selectedItemId: number) => (this.editItemId = selectedItemId);
 

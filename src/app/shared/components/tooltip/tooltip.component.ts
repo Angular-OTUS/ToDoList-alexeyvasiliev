@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TooltipPosition } from '@shared/directives/tooltip.enums';
+import { TooltipPosition } from '@shared/directives/tooltip/tooltip.enums';
 
 @Component({
   selector: 'app-tooltip',
@@ -11,5 +11,5 @@ export class TooltipComponent {
   left = 0;
   top = 0;
   visible = false;
-  position: TooltipPosition = TooltipPosition.DEFAULT;
+  position: TooltipPosition = TooltipPosition.ABOVE;
 }

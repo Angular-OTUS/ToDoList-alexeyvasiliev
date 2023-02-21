@@ -7,8 +7,6 @@ import {
   TodoHeaderComponent,
   TodoItemComponent,
   TodoListComponent,
-  TodoToastComponent,
-  TodoToasterComponent,
 } from '@components/index';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,8 +24,6 @@ import { APP_CONFIG, Configuration } from './config/appConfig';
     TodoHeaderComponent,
     TodoAddFormComponent,
     TodoDetailsComponent,
-    TodoToasterComponent,
-    TodoToastComponent,
   ],
   imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, FormsModule, SharedModule],
   providers: [
