@@ -7,9 +7,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '@shared/shared.module';
+
 @NgModule({
   declarations: [AppComponent, TodoListComponent, TodoItemComponent, TodoHeaderComponent, TodoAddFormComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, FormsModule],
+  imports: [BrowserModule, BrowserAnimationsModule, MatIconModule, MatButtonModule, FormsModule, SharedModule],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -18,20 +18,19 @@
 1.  Скачать репозиторий
 
 ```shell
-git clone git@github.com:vasiliev-alexey/otus_node_course.git
+git clone git@github.com:Angular-OTUS/ToDoList-alexeyvasiliev.git
 ```
 
 2.  Установить зависимости
 
 ```shell
-pnpm i
+npm i
 ```
 
 3. Запустить
 
 ```shell
-cd packages\
-npm run dev
+npm run start
 ```
 
 ---

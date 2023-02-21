@@ -8,8 +8,16 @@ import { Todo } from '@interfaces/Todo';
 })
 export class TodoListComponent implements OnInit {
   items: Todo[] = [];
+  isLoading?: boolean = true;
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.fetchData();
+      this.isLoading = false;
+    }, 1000);
+  }
+
+  private fetchData(): void {
     this.items.push(
       {
         id: 1,

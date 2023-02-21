@@ -1,9 +1,8 @@
 <span class="add-card">
-  <input type="text" required minlength="4" maxlength="150" size="50" [(ngModel)]="text" />
-  <button
-    [disabled]="text.trim().length === 0"
-    class="add-card_btn"
-    [class.add-card_btn--active]="text.trim().length > 0"
-    (click)="onClick()">    📝
-  </button>
+  <input type="text" required minlength="4" maxlength="150" size="50" [(ngModel)]="text"/>
+  <app-button
+    [disabled]="isDisabled()"
+    [class.add-card_btn--active]="!isDisabled()"
+    (click)="onClick()"> 📝
+  </app-button>
 </span>

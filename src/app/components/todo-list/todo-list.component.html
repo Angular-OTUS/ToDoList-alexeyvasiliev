@@ -1,9 +1,10 @@
 <div class="todo-card">
   <app-todo-header></app-todo-header>
   <app-todo-add-form (newItemEvent)="onItemAdd($event)"></app-todo-add-form>
-  <ul class="todo-card_list">
+  <ul *ngIf="!isLoading" class="todo-card_list">
     <li *ngFor="let item of items" class="todo-card_list_item">
-      <app-todo-item [todo]="item" (removeItem)="onItemRemove($event)"> </app-todo-item>
+      <app-todo-item [todo]="item" (removeItem)="onItemRemove($event)"></app-todo-item>
     </li>
   </ul>
+  <app-loader *ngIf="isLoading"></app-loader>
 </div>
