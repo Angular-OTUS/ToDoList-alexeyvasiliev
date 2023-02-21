@@ -13,11 +13,14 @@
         <ng-container class="btn-icon">📝</ng-container>
       </app-button>
 
-      <div
-        class="alert alert-danger"
-        *ngIf="editForm.controls['todoTitle'].invalid && editForm.controls['todoTitle'].touched">
-        Не указано имя задачи
-      </div>
+      <ng-container *ngIf="editForm.controls['todoTitle'].invalid && editForm.controls['todoTitle'].touched">
+        <div class="alert alert-danger" *ngIf="editForm.controls.todoTitle.getError('required') as err">
+          Не указано имя задачи
+        </div>
+        <div class="alert alert-danger" *ngIf="editForm.controls.todoTitle.getError('minlength') as err">
+          Значение должно быть более {{ err.requiredLength }} символов
+        </div>
+      </ng-container>
     </div>
     <textarea
       name="todoDescription"

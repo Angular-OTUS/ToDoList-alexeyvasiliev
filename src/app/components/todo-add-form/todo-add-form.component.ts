@@ -9,9 +9,14 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TooltipPosition } from '@shared/directives/tooltip.enums';
-import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {TooltipPosition} from '@shared/directives/tooltip.enums';
+import {Todo, TodoDraft, TodoStatus} from '@interfaces/Todo';
+
+interface TodoFormModel {
+  todoTitle: AbstractControl<string | null>;
+  todoDescription: AbstractControl<string | null>;
+}
 
 @Component({
   selector: 'app-todo-add-form',
@@ -21,7 +26,6 @@ import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
 export class TodoAddFormComponent implements OnChanges {
   @Input()
   editTodoId?: number;
-
   @Input()
   editTodo?: Todo;
 
@@ -29,36 +33,34 @@ export class TodoAddFormComponent implements OnChanges {
   @Output() private editedItemEvent = new EventEmitter<Todo>();
   private readonly eRef = inject(ElementRef);
   TooltipPosition: typeof TooltipPosition = TooltipPosition;
-  private todoTitle = new FormControl<string>('', Validators.required);
-  private todoDescription = new FormControl<string>('');
-  editForm = new FormGroup({
-    todoTitle: this.todoTitle,
-    todoDescription: this.todoDescription,
+  readonly editForm = new FormGroup<TodoFormModel>({
+    todoTitle: new FormControl<string | null>(null, [Validators.required, Validators.minLength(3)]),
+    todoDescription: new FormControl<string | null>(null),
   });
 
   isDisabled = (): boolean => {
     if (this.editTodoId) {
       return true;
     }
-    return this.todoTitle.value?.trim().length === 0;
+    return this.editForm.controls.todoTitle.value?.trim().length === 0;
   };
 
   @HostListener('document:click', ['$event'])
   clickOut(event: MouseEvent) {
     if (!this.eRef.nativeElement.contains(event.target) && this.editTodo) {
-      this.editTodo.text = this.todoTitle.value ?? '';
-      this.editTodo.description = this.todoDescription.value ?? undefined;
+      this.editTodo.text = this.editForm.controls.todoTitle.value ?? '';
+      this.editTodo.description = this.editForm.controls.todoDescription.value ?? undefined;
       this.editedItemEvent.emit(this.editTodo);
     }
   }
 
   onSubmit(): void {
-    if (this.isDisabled() || !this.todoTitle.value) {
+    if (this.isDisabled() || !this.editForm.controls.todoTitle.value) {
       return;
     }
     this.newItemEvent.emit({
-      text: this.todoTitle.value,
-      description: this.todoDescription.value || undefined,
+      text: this.editForm.controls.todoTitle.value,
+      description: this.editForm.controls.todoDescription.value || undefined,
       status: TodoStatus.InProgress,
     });
     this.editForm.reset();

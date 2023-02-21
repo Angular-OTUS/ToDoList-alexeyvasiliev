@@ -67,10 +67,10 @@ export class TodoListComponent implements OnInit {
   };
   onItemStatusChanged = (changeParams: [number, TodoStatus]) => {
     this.store.changeStatus(changeParams[0], changeParams[1]).subscribe(_ => {
+      const [idTask, status] = changeParams;
+
       this.toastService.showToast(
-        changeParams[1] === TodoStatus.Completed
-          ? `✔️ Задача ${changeParams[0]} выполнена`
-          : `🚧 Задача ${changeParams[0]} на выполнении`,
+        status === TodoStatus.Completed ? `✔️ Задача ${idTask} выполнена` : `🚧 Задача ${idTask} на выполнении`,
         ToastType.STATUS_CHANGED
       );
       this.fetchData();
