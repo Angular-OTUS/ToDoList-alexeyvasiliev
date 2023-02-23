@@ -11,7 +11,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { TooltipComponent } from '@shared/components/tooltip/tooltip.component';
-import { TooltipPosition } from '@shared/directives/tooltip.enums';
+import { TooltipPosition } from '@shared/directives/tooltip/tooltip.enums';
 
 @Directive({
   selector: '[appTooltip]',

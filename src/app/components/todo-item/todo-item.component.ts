@@ -1,6 +1,6 @@
 import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { Todo, TodoStatus } from '@interfaces/Todo';
-import { TooltipPosition } from '@shared/directives/tooltip.enums';
+import { TooltipPosition } from '@shared/directives/tooltip/tooltip.enums';
 
 @Component({
   selector: 'app-todo-item',

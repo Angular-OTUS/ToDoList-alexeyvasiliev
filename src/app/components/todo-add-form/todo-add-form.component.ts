@@ -9,9 +9,10 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {TooltipPosition} from '@shared/directives/tooltip.enums';
-import {Todo, TodoDraft, TodoStatus} from '@interfaces/Todo';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
+import { TooltipPosition } from '@shared/directives/tooltip/tooltip.enums';
 
 interface TodoFormModel {
   todoTitle: AbstractControl<string | null>;

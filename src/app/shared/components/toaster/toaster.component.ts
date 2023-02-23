@@ -1,17 +1,17 @@
 import { Component, ElementRef, EmbeddedViewRef, inject, OnDestroy, ViewContainerRef } from '@angular/core';
 import { TooltipComponent } from '@shared/components/tooltip/tooltip.component';
-import { TodoToastComponent } from '@components/todo-toast/todo-toast.component';
-import { TodoToastService } from '@services/todo-toast.service';
+import { ToastService } from '@shared/services/toast.service';
 import { Subscription, timer } from 'rxjs';
-import { APP_CONFIG } from '../../config/appConfig';
-import { ToastType } from '@interfaces/Toast';
+import { APP_CONFIG } from '../../../config/appConfig';
+import { ToastType } from '@shared/interfaces/Toast';
+import { ToastComponent } from '@shared/components';
 
 @Component({
-  selector: 'app-todo-toaster',
-  templateUrl: './todo-toaster.component.html',
-  styleUrls: ['./todo-toaster.component.scss'],
+  selector: 'app-toaster',
+  templateUrl: './toaster.component.html',
+  styleUrls: ['./toaster.component.scss'],
 })
-export class TodoToasterComponent implements OnDestroy {
+export class ToasterComponent implements OnDestroy {
   private readonly elementRef = inject(ElementRef);
 
   private readonly viewContainerRef = inject(ViewContainerRef);
@@ -20,15 +20,15 @@ export class TodoToasterComponent implements OnDestroy {
   private readonly subscription$: Subscription;
   private destroySubscription$?: Subscription;
 
-  constructor(private readonly toastServer: TodoToastService) {
-    this.subscription$ = toastServer.toastQueue$.subscribe(toast => this.createToast(toast?.text, toast?.type));
+  constructor(private readonly toastServer: ToastService) {
+    this.subscription$ = toastServer.toastQueue$.subscribe(toast => this.create(toast?.text, toast?.type));
   }
 
-  private createToast(message: string | undefined, type: ToastType = ToastType.ADD): void {
+  private create(message: string | undefined, type: ToastType = ToastType.ADD): void {
     if (!message) {
       return;
     }
-    const componentRef = this.viewContainerRef.createComponent(TodoToastComponent);
+    const componentRef = this.viewContainerRef.createComponent(ToastComponent);
     componentRef.instance.text = message;
     componentRef.instance.type = type;
     const [tooltipDOMElement] = (componentRef.hostView as EmbeddedViewRef<TooltipComponent>).rootNodes;
