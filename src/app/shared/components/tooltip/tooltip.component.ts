@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TooltipPosition } from '@shared/directives/tooltip/tooltip.enums';
+import { TooltipPosition } from '../../directives/tooltip/tooltip.enums';
 
 @Component({
   selector: 'app-tooltip',

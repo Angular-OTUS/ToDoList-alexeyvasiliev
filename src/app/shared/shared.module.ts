@@ -1,14 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  TooltipComponent,
-  LoaderComponent,
-  ButtonComponent,
-  ToasterComponent,
-  ToastComponent,
-} from '@shared/components';
+import { TooltipComponent, LoaderComponent, ButtonComponent, ToasterComponent, ToastComponent } from './components';
 import { TooltipDirective } from './directives/tooltip/tooltip.directive';
-import { ToastService } from '@shared/services/toast.service';
+import { ToastService } from './services/toast.service';
 
 @NgModule({
   declarations: [

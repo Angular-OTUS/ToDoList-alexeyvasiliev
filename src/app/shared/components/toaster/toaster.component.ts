@@ -1,10 +1,10 @@
 import { Component, ElementRef, EmbeddedViewRef, inject, OnDestroy, ViewContainerRef } from '@angular/core';
-import { TooltipComponent } from '@shared/components/tooltip/tooltip.component';
-import { ToastService } from '@shared/services/toast.service';
+import { TooltipComponent } from '../tooltip/tooltip.component';
+import { ToastService } from '../../services/toast.service';
 import { Subscription, timer } from 'rxjs';
 import { APP_CONFIG } from '../../../config/appConfig';
-import { ToastType } from '@shared/interfaces/Toast';
-import { ToastComponent } from '@shared/components';
+import { ToastType } from '../../interfaces/Toast';
+import { ToastComponent } from '../index';
 
 @Component({
   selector: 'app-toaster',
