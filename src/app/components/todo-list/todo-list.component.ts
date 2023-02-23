@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Todo, TodoDraft, TodoState, TodoStatus, TodoStatusState } from '@interfaces/Todo';
 import { TodoStore } from '@services/todo-store.service';
-import { TodoToastService } from '@services/todo-toast.service';
-import { ToastType } from '@interfaces/Toast';
+
+import { ToastType } from '@shared/interfaces/Toast';
+import { ToastService } from '@shared/services/toast.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -22,7 +23,7 @@ export class TodoListComponent implements OnInit {
   selectedItemDesc?: string;
 
   private readonly store = inject(TodoStore);
-  private readonly toastService = inject(TodoToastService);
+  private readonly toastService = inject(ToastService);
   private savedFilter: TodoStatusState = TodoState.All;
 
   ngOnInit(): void {

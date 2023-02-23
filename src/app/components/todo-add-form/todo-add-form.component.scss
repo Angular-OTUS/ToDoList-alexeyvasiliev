@@ -9,14 +9,14 @@
   }
 }
 
-.add-tittle {
-  width: 85%;
-  height: 2rem;
+.add-card-panel {
+  display: flex;
+  justify-content: space-between;
 }
 
-.ng-valid[required],
-.ng-valid.required .ng-touched {
-  border: 5px solid #42a948;
+.add-tittle {
+  margin-right: 0.2rem;
+  flex: 1;
 }
 
 .ng-invalid:not(form).ng-touched {
@@ -24,11 +24,13 @@
 }
 
 .add-card_btn {
-  width: 5%;
-  background-color: slategray;
+  width: 20%;
+  max-width: 3rem;
   opacity: 50%;
+  display: flex;
+  flex-wrap: wrap;
   text-align: center;
-  margin: 5px;
+  align-content: center;
 }
 
 .add-card_btn--active {

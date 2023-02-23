@@ -32,13 +32,13 @@
     },
     {
       "status": "Completed",
-      "description": "Добавляем форму  редактирования элемента списка, HTTP client\n",
-      "text": "# Добавляем форму  редактирования элемента списка, HTTP client\n",
+      "description": "☑️ Начать применять Angular формы. ☑️ Работать с бизнес данными через HTTP API и сервисы.",
+      "text": "Добавляем форму  редактирования элемента списка, HTTP client",
       "id": 6
     },
     {
-      "text": "Дз 7eeeeeeeeeeeeeeeeeeeeeee",
-      "description": "Дз 7",
+      "text": "Добавляем роутинг",
+      "description": "Научиться добавлять роутинг и настраивать его в приложение с нуля.",
       "status": "InProgress",
       "id": 7
     }

@@ -1,6 +1,6 @@
 <span class="add-card">
   <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-    <div>
+    <div class="add-card-panel">
       <input formControlName="todoTitle" class="add-tittle" type="text" placeholder="Задача" />
 
       <app-button
@@ -12,16 +12,16 @@
         [position]="TooltipPosition.ABOVE">
         <ng-container class="btn-icon">📝</ng-container>
       </app-button>
-
-      <ng-container *ngIf="editForm.controls['todoTitle'].invalid && editForm.controls['todoTitle'].touched">
-        <div class="alert alert-danger" *ngIf="editForm.controls.todoTitle.getError('required') as err">
-          Не указано имя задачи
-        </div>
-        <div class="alert alert-danger" *ngIf="editForm.controls.todoTitle.getError('minlength') as err">
-          Значение должно быть более {{ err.requiredLength }} символов
-        </div>
-      </ng-container>
     </div>
+    <ng-container *ngIf="editForm.controls['todoTitle'].invalid && editForm.controls['todoTitle'].touched">
+      <div class="alert alert-danger" *ngIf="editForm.controls.todoTitle.getError('required') as err">
+        Не указано имя задачи
+      </div>
+      <div class="alert alert-danger" *ngIf="editForm.controls.todoTitle.getError('minlength') as err">
+        Значение должно быть более {{ err.requiredLength }} символов
+      </div>
+    </ng-container>
+
     <textarea
       name="todoDescription"
       formControlName="todoDescription"

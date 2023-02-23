@@ -3,6 +3,4 @@ export enum TooltipPosition {
   BELOW = 'below',
   LEFT = 'left',
   RIGHT = 'right',
-  DYNAMIC = 'dynamic',
-  DEFAULT = 'above',
 }

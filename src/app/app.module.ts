@@ -7,8 +7,6 @@ import {
   TodoHeaderComponent,
   TodoItemComponent,
   TodoListComponent,
-  TodoToastComponent,
-  TodoToasterComponent,
 } from '@components/index';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,8 +28,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     TodoHeaderComponent,
     TodoAddFormComponent,
     TodoDetailsComponent,
-    TodoToasterComponent,
-    TodoToastComponent,
     TodoFilterPanelComponent,
   ],
   imports: [
