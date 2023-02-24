@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, Subscription } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 import { TodoStore } from '@services/todo-store.service';
 
 @Component({
@@ -11,19 +11,22 @@ import { TodoStore } from '@services/todo-store.service';
 export class TodoDetailsComponent implements OnInit, OnDestroy {
   description?: string;
 
-  private sub$ = new Subscription();
-  private subStore$ = new Subscription();
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   private readonly route = inject(ActivatedRoute);
   private readonly store = inject(TodoStore);
 
   ngOnInit(): void {
-    this.sub$ = this.route.params
+    this.route.params
       .pipe(
+        takeUntil(this.destroy$),
         map(param => {
           this.description = window.history.state.description;
           if (!this.description) {
-            this.subStore$ = this.store.getById(param['id']).subscribe(data => (this.description = data?.description));
+            this.store
+              .getById(param['id'])
+              .pipe(takeUntil(this.destroy$))
+              .subscribe(data => (this.description = data?.description));
           }
         })
       )
@@ -31,7 +34,7 @@ export class TodoDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub$.unsubscribe();
-    this.subStore$?.unsubscribe();
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }

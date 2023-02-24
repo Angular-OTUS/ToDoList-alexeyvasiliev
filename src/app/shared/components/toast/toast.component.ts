@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, inject, Input, OnDestroy } from '@angular/core';
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Subscription, timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 import { ToastType } from '../../interfaces/Toast';
 import { APP_CONFIG } from '../../../config/appConfig';
 
@@ -16,17 +16,20 @@ export class ToastComponent implements AfterViewInit, OnDestroy {
 
   @Input()
   type: ToastType = ToastType.ADD;
-  private subscription$?: Subscription;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   private readonly appConfig = inject(APP_CONFIG);
 
   end = true;
 
   ngAfterViewInit(): void {
-    this.subscription$ = timer(this.appConfig.toastTimeOut / 10).subscribe(_ => (this.end = false));
+    timer(this.appConfig.toastTimeOut / 10)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(_ => (this.end = false));
   }
 
   ngOnDestroy(): void {
-    this.subscription$?.unsubscribe();
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
