@@ -1,6 +1,6 @@
 <div class="todo_item" [class.selected]="isSelected" (click)="onSelectedClick(todo.id)">
   <div class="todo_item_text">
-    <p>{{ todo.id }} . {{ todo.text }}</p>
+    <p (dblclick)="onDblClick(todo.id)">{{ todo.id }} . {{ todo.text }}</p>
   </div>
   <app-button (click)="onItemDelete(todo.id)" appTooltip tooltip="Удалить Задачу" [position]="TooltipPosition.LEFT"
     >🗑️

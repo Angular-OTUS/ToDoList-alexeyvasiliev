@@ -1,0 +1,23 @@
+.toast {
+  position: relative;
+  min-height: 2rem;
+  min-width: 10rem;
+  border: #2651a1 1px;
+  margin: 5px;
+  border-radius: 15px;
+  padding: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--add {
+    background-color: #bff1c1;
+  }
+  &--edit {
+    background-color: #5b96e0;
+  }
+  &--remove {
+    background-color: #eac485;
+  }
+}

@@ -16,6 +16,8 @@
         "plugin:prettier/recommended"
       ],
       "rules": {
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+        "no-console": "error",
         "comma-dangle": "off",
         "@typescript-eslint/comma-dangle": ["error", "only-multiline"],
         "@angular-eslint/directive-selector": [
