@@ -4,6 +4,7 @@
   border: aliceblue 1px solid;
   border-radius: 5px;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  margin: 2px;
 }
 
 .selected {
@@ -11,7 +12,14 @@
 }
 
 .todo_item_text {
-  width: 80%;
+  width: 95%;
   padding: 0 5px 0 5px;
   align-items: center;
+}
+
+.complete-check {
+  width: 2rem;
+  height: 1.5rem;
+  margin: 5px;
+  accent-color: rgba(194, 126, 59, 0.66);
 }

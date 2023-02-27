@@ -2,7 +2,16 @@
   <div class="todo_item_text">
     <p (dblclick)="onDblClick(todo.id)">{{ todo.id }} . {{ todo.text }}</p>
   </div>
-  <app-button (click)="onItemDelete(todo.id)" appTooltip tooltip="Удалить Задачу" [position]="TooltipPosition.LEFT"
-    >🗑️
+  <app-button (click)="onItemDelete(todo.id)" appTooltip tooltip="Удалить Задачу" [position]="TooltipPosition.LEFT">
+    <ng-container class="btn-icon">🗑️</ng-container>
   </app-button>
+
+  <input
+    class="complete-check"
+    type="checkbox"
+    (change)="changeStatus(todo.id)"
+    [checked]="isCompleted"
+    appTooltip
+    tooltip="{{ isCompleted ? 'Отметить  Выполненной' : 'Отметить  не выполненной' }}"
+    [position]="TooltipPosition.LEFT" />
 </div>

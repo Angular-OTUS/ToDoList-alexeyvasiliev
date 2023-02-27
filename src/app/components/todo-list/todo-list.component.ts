@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Todo, TodoDraft } from '@interfaces/Todo';
+import { Todo, TodoDraft, TodoState, TodoStatus, TodoStatusState } from '@interfaces/Todo';
 import { TodoStore } from '@services/todo-store.service';
-import { ToastService } from '@shared/services/toast.service';
+
 import { ToastType } from '@shared/interfaces/Toast';
+import { ToastService } from '@shared/services/toast.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -11,49 +12,81 @@ import { ToastType } from '@shared/interfaces/Toast';
 })
 export class TodoListComponent implements OnInit {
   items: Todo[] = [];
-  isLoading?: boolean;
+
+  private storedItems: Todo[] = [];
+  isLoading = true;
+
   selectedItemId?: number;
-  editItemId?: number;
+
+  editTodo?: Todo;
+
   selectedItemDesc?: string;
 
   private readonly store = inject(TodoStore);
   private readonly toastService = inject(ToastService);
+  private savedFilter: TodoStatusState = TodoState.All;
 
   ngOnInit(): void {
     this.isLoading = true;
-    setTimeout(() => {
-      this.fetchData();
-      this.isLoading = false;
-    }, 1000);
+    this.fetchData();
+    this.isLoading = false;
   }
 
   onItemRemove(id: number) {
-    if (!this.store.removeTodo(id)) {
-      return;
-    }
-    this.toastService.showToast('🗑️ Задача удалена', ToastType.REMOVE);
-    this.fetchData();
-
-    if (id === this.selectedItemId) {
-      this.selectedItemId = undefined;
-      this.selectedItemDesc = undefined;
-    }
+    this.store.removeTodo(id).subscribe(_ => {
+      this.toastService.showToast('🗑️ Задача удалена', ToastType.REMOVE);
+      this.fetchData();
+      if (id === this.selectedItemId) {
+        this.selectedItemId = undefined;
+        this.selectedItemDesc = undefined;
+      }
+    });
   }
 
   onItemAdd(todoDraft: TodoDraft) {
-    this.store.addTodo(todoDraft);
-    this.toastService.showToast('✅ Задача добавлена', ToastType.ADD);
-    this.fetchData();
+    this.store.addTodo(todoDraft).subscribe(_ => {
+      this.toastService.showToast('✅ Задача добавлена', ToastType.ADD);
+      this.fetchData();
+    });
   }
 
   onItemSelected(selectedItemId: number) {
     this.selectedItemId = selectedItemId;
-    this.selectedItemDesc = this.items.filter(item => item.id === selectedItemId).at(0)?.description;
+    this.selectedItemDesc = this.items.find(item => item.id == selectedItemId)?.description;
   }
 
-  private fetchData = () => (this.items = this.store.getAll());
+  private fetchData = () =>
+    this.store.getAll().subscribe(data => {
+      this.storedItems = [...data];
+      this.onFilterChange();
+    });
 
-  onItemEdit = (selectedItemId: number) => (this.editItemId = selectedItemId);
+  onItemEditClick = (selectedItemId: number) => {
+    this.store.getById(selectedItemId).subscribe(todo => {
+      this.editTodo = todo;
+    });
+  };
+  onItemStatusChanged = (changeParams: [number, TodoStatus]) => {
+    this.store.changeStatus(changeParams[0], changeParams[1]).subscribe(_ => {
+      const [idTask, status] = changeParams;
 
-  resetItemEdit = () => (this.editItemId = undefined);
+      this.toastService.showToast(
+        status === TodoStatus.Completed ? `✔️ Задача ${idTask} выполнена` : `🚧 Задача ${idTask} на выполнении`,
+        ToastType.STATUS_CHANGED
+      );
+      this.fetchData();
+    });
+  };
+
+  onFilterChange = (filterType: TodoStatusState = this.savedFilter) => {
+    this.savedFilter = filterType;
+    return (this.items = this.storedItems.filter(t => filterType == TodoState.All || t.status === filterType));
+  };
+
+  onItemEdit(todoEdit: Todo): void {
+    this.store.save(todoEdit);
+    this.toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
+    this.editTodo = undefined;
+    this.fetchData();
+  }
 }

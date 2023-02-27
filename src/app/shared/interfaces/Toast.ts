@@ -6,4 +6,5 @@ export enum ToastType {
   ADD = 'add',
   EDIT = 'edit',
   REMOVE = 'remove',
+  STATUS_CHANGED = 'status-changed',
 }

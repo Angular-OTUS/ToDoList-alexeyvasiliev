@@ -9,16 +9,28 @@
   }
 }
 
+.add-card-panel {
+  display: flex;
+  justify-content: space-between;
+}
+
 .add-tittle {
-  width: 80%;
-  height: 1rem;
+  margin-right: 0.2rem;
+  flex: 1;
+}
+
+.ng-invalid:not(form).ng-touched {
+  border: 2px solid #de1b1b;
 }
 
 .add-card_btn {
   width: 20%;
-  background-color: rgba(236, 203, 182, 0.7);
+  max-width: 3rem;
   opacity: 50%;
+  display: flex;
+  flex-wrap: wrap;
   text-align: center;
+  align-content: center;
 }
 
 .add-card_btn--active {
@@ -26,7 +38,8 @@
 }
 
 .add-description {
-  width: 90%;
+  margin-top: 5px;
+  width: 94%;
   height: 5rem;
   resize: none;
 }
