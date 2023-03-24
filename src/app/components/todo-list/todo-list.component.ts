@@ -4,6 +4,8 @@ import { TodoStore } from '@services/todo-store.service';
 
 import { ToastType } from '@shared/interfaces/Toast';
 import { ToastService } from '@shared/services/toast.service';
+import { Router } from '@angular/router';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
@@ -20,10 +22,10 @@ export class TodoListComponent implements OnInit {
 
   editTodo?: Todo;
 
-  selectedItemDesc?: string;
-
   private readonly store = inject(TodoStore);
   private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
+
   private savedFilter: TodoStatusState = TodoState.All;
 
   ngOnInit(): void {
@@ -38,7 +40,6 @@ export class TodoListComponent implements OnInit {
       this.fetchData();
       if (id === this.selectedItemId) {
         this.selectedItemId = undefined;
-        this.selectedItemDesc = undefined;
       }
     });
   }
@@ -50,9 +51,11 @@ export class TodoListComponent implements OnInit {
     });
   }
 
-  onItemSelected(selectedItemId: number) {
+  async onItemSelected(selectedItemId: number) {
     this.selectedItemId = selectedItemId;
-    this.selectedItemDesc = this.items.find(item => item.id == selectedItemId)?.description;
+    const description = this.items.find(item => item.id == selectedItemId)?.description;
+
+    await this.router.navigate([`tasks/${selectedItemId}`], { state: { description } });
   }
 
   private fetchData = () =>
@@ -78,15 +81,21 @@ export class TodoListComponent implements OnInit {
     });
   };
 
-  onFilterChange = (filterType: TodoStatusState = this.savedFilter) => {
+  onFilterChange = (filterType: TodoStatusState = this.savedFilter): void => {
     this.savedFilter = filterType;
-    return (this.items = this.storedItems.filter(t => filterType == TodoState.All || t.status === filterType));
+    this.items = this.storedItems.filter(t => filterType == TodoState.All || t.status === filterType);
   };
 
   onItemEdit(todoEdit: Todo): void {
-    this.store.save(todoEdit);
-    this.toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
-    this.editTodo = undefined;
-    this.fetchData();
+    this.store
+      .save(todoEdit)
+      .pipe(
+        map(() => {
+          this.toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
+          this.editTodo = undefined;
+          this.fetchData();
+        })
+      )
+      .subscribe();
   }
 }

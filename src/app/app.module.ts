@@ -7,18 +7,34 @@ import {
   TodoHeaderComponent,
   TodoItemComponent,
   TodoListComponent,
+  TodoFilterPanelComponent,
 } from '@components/index';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '@shared/shared.module';
 import { TodoStore } from '@services/index';
 import { APP_CONFIG, Configuration } from './config/appConfig';
 import { TodoRestStoreService } from '@services/todo-store.service';
 import { HttpClientModule } from '@angular/common/http';
-import { TodoFilterPanelComponent } from './components/todo-filter-panel/todo-filter-panel.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { SharedModule } from '@shared/shared.module';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
+
+  {
+    path: 'tasks',
+    component: TodoListComponent,
+  },
+  {
+    path: 'tasks/:id',
+    component: TodoListComponent,
+    children: [{ path: '', component: TodoDetailsComponent }],
+  },
+  { path: '**', redirectTo: '/' },
+];
 
 @NgModule({
   declarations: [
@@ -40,6 +56,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     SharedModule,
     HttpClientModule,
     MatButtonToggleModule,
+    RouterModule.forRoot(routes),
   ],
   providers: [
     { provide: TodoStore, useClass: TodoRestStoreService },

@@ -20,5 +20,5 @@
     <app-loader *ngIf="isLoading"></app-loader>
   </div>
 
-  <app-todo-details *ngIf="!!selectedItemId" [description]="selectedItemDesc"></app-todo-details>
+  <router-outlet></router-outlet>
 </div>

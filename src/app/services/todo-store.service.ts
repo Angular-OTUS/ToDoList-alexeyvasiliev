@@ -10,7 +10,7 @@ export abstract class TodoStore {
   abstract getById(id: number): Observable<Todo | undefined>;
   abstract removeTodo(id: number): Observable<void>;
   abstract addTodo(todoDraft: TodoDraft): Observable<void>;
-  abstract save(todo: Todo): void;
+  abstract save(todo: Todo): Observable<void>;
   abstract changeStatus(id: number, newStatus: TodoStatus): Observable<void>;
 }
 
@@ -33,7 +33,7 @@ export class TodoRestStoreService extends TodoStore {
     return this.httpClient.delete<void>(`${this.appConfig.URL}/${id}`);
   };
 
-  save = (todo: Todo): void => {
-    this.httpClient.patch<void>(`${this.appConfig.URL}/${todo.id}`, todo).subscribe();
+  save = (todo: Todo): Observable<void> => {
+    return this.httpClient.patch<void>(`${this.appConfig.URL}/${todo.id}`, todo);
   };
 }
