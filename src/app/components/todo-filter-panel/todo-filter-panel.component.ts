@@ -12,7 +12,7 @@ export class TodoFilterPanelComponent {
 
   readonly all: typeof TodoState = TodoState;
   readonly todoStatus: typeof TodoStatus = TodoStatus;
-  onValChange(value: TodoStatusState) {
+  onFilterValueChange(value: TodoStatusState) {
     this.filterEmitter.emit(value);
   }
 }

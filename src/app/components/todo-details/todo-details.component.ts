@@ -21,13 +21,10 @@ export class TodoDetailsComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         map(param => {
-          this.description = window.history.state.description;
-          if (!this.description) {
-            this.store
-              .getById(param['id'])
-              .pipe(takeUntil(this.destroy$))
-              .subscribe(data => (this.description = data?.description));
-          }
+          this.store
+            .getTodoById(param['id'])
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => (this.description = data?.description));
         })
       )
       .subscribe();

@@ -1,11 +1,13 @@
 <p>
   Тип:
   <mat-button-toggle-group class="filter-panel" name="fontStyle" aria-label="Font Style">
-    <mat-button-toggle (change)="onValChange($event.value)" value="{{ all.All }}" checked>Все</mat-button-toggle>
-    <mat-button-toggle (change)="onValChange($event.value)" value="{{ todoStatus.InProgress }}"
+    <mat-button-toggle (change)="onFilterValueChange($event.value)" value="{{ all.All }}" checked
+      >Все</mat-button-toggle
+    >
+    <mat-button-toggle (change)="onFilterValueChange($event.value)" value="{{ todoStatus.InProgress }}"
       >В работе</mat-button-toggle
     >
-    <mat-button-toggle (change)="onValChange($event.value)" value="{{ todoStatus.Completed }}"
+    <mat-button-toggle (change)="onFilterValueChange($event.value)" value="{{ todoStatus.Completed }}"
       >Выполненные</mat-button-toggle
     >
   </mat-button-toggle-group>
