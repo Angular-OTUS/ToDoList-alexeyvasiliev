@@ -5,7 +5,7 @@ import { TodoStore } from '@services/todo-store.service';
 import { ToastType } from '@shared/interfaces/Toast';
 import { ToastService } from '@shared/services/toast.service';
 import { Router } from '@angular/router';
-import { map } from 'rxjs';
+import {BehaviorSubject, filter, map} from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
@@ -13,7 +13,7 @@ import { map } from 'rxjs';
   styleUrls: ['./todo-list.component.scss'],
 })
 export class TodoListComponent implements OnInit {
-  items: Todo[] = [];
+  items = new BehaviorSubject<Todo[]>([]);
 
   private storedItems: Todo[] = [];
   isLoading = true;
@@ -29,6 +29,7 @@ export class TodoListComponent implements OnInit {
   private savedFilter: TodoStatusState = TodoState.All;
 
   ngOnInit(): void {
+     this.items =  this.store.listDataTodo;
     this.isLoading = true;
     this.fetchData();
     this.isLoading = false;
@@ -53,16 +54,23 @@ export class TodoListComponent implements OnInit {
 
   async onItemSelected(selectedItemId: number) {
     this.selectedItemId = selectedItemId;
-    const description = this.items.find(item => item.id == selectedItemId)?.description;
+   // const description = this.items.find(item => item.id == selectedItemId)?.description;
 
-    await this.router.navigate([`tasks/${selectedItemId}`], { state: { description } });
+    await this.router.navigate([`tasks/${selectedItemId}`], { state: {  } });
   }
 
-  private fetchData = () =>
-    this.store.getAll().subscribe(data => {
-      this.storedItems = [...data];
-      this.onFilterChange();
-    });
+  private fetchData = () => {
+    this.store.getAll();
+
+    console.log("y",  this.items.getValue());
+
+    this.storedItems = [...  this.items.getValue() ]
+    //this.onFilterChange();
+  }
+    // this.store.getAll().subscribe(data => {
+    //   this.storedItems = [...data];
+    //   this.onFilterChange();
+    // });
 
   onItemEditClick = (selectedItemId: number) => {
     this.store.getById(selectedItemId).subscribe(todo => {
@@ -83,7 +91,12 @@ export class TodoListComponent implements OnInit {
 
   onFilterChange = (filterType: TodoStatusState = this.savedFilter): void => {
     this.savedFilter = filterType;
-    this.items = this.storedItems.filter(t => filterType == TodoState.All || t.status === filterType);
+    console.log( "onFilterChange" , filterType);
+
+    this.items.next(  this.items.getValue().filter( t => filterType == TodoState.All || t.status === filterType));
+
+   // this.items = this.storedItems.filter(t => filterType == TodoState.All || t.status === filterType);
+  //  this.items = new BehaviorSubject<Todo[]>(  this.storedItems.filter(t => filterType == TodoState.All || t.status === filterType));
   };
 
   onItemEdit(todoEdit: Todo): void {

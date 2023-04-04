@@ -1,2 +1,2 @@
-import { TodoStore, TodoRestStoreService } from './todo-store.service';
-export { TodoStore, TodoRestStoreService };
+import { TodoStore } from './todo-store.service';
+export { TodoStore };
