@@ -15,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TodoStore } from '@services/index';
 import { APP_CONFIG, Configuration } from './config/appConfig';
-// import { TodoStore } from '@services/todo-store.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SharedModule } from '@shared/shared.module';

@@ -1,10 +1,9 @@
-import {Todo, TodoDraft, TodoStatus} from '@interfaces/Todo';
-import {inject} from '@angular/core';
-import {BehaviorSubject, EMPTY, Observable, of, tap} from 'rxjs';
-import {TodoApiService} from '@services/todo-api.service';
+import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
+import { inject } from '@angular/core';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { TodoApiService } from '@services/todo-api.service';
 
 export class TodoStore {
-
   private readonly toDoListSubject$ = new BehaviorSubject<Todo[]>([]);
   readonly toDoList$ = this.toDoListSubject$.asObservable();
 
@@ -18,10 +17,7 @@ export class TodoStore {
 
   addTodo(todoDraft: TodoDraft): void {
     this.todoApiService.addTodo(todoDraft).subscribe((addedTodo: Todo) => {
-      this.toDoListSubject$.next([
-        ...this.toDoListSubject$.value,
-        addedTodo,
-      ]);
+      this.toDoListSubject$.next([...this.toDoListSubject$.value, addedTodo]);
     });
   }
 
@@ -29,23 +25,18 @@ export class TodoStore {
     this.toDoListSubject$.next(this.toDoListSubject$.value);
   }
 
-
   getTodoById = (id: number): Observable<Todo | undefined> => this.todoApiService.getById(id);
   removeTodo = (id: number): Observable<void> => {
     return this.todoApiService.removeTodo(id).pipe(
       tap(() => {
-        this.toDoListSubject$.next([
-          ...this.toDoListSubject$.value.filter(v => v.id !== id)
-        ]);
+        this.toDoListSubject$.next([...this.toDoListSubject$.value.filter(v => v.id !== id)]);
       })
-    )
+    );
   };
 
   saveTodo(todo: Todo): Observable<void> {
     this.todoApiService.save(todo).subscribe(() => {
-      this.toDoListSubject$.next([
-        ...this.toDoListSubject$.value.filter(v => v.id !== todo.id), todo
-      ]);
+      this.toDoListSubject$.next([...this.toDoListSubject$.value.filter(v => v.id !== todo.id), todo]);
     });
     return of(void 0);
   }
