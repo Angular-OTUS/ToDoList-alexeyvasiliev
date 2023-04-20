@@ -7,7 +7,7 @@
     <ul *ngIf="(isLoading$ | async) === false; else loading" class="todo-card_list">
       <app-todo-filter-panel (filterEmitter)="onFilterChange($event)"></app-todo-filter-panel>
 
-      <li *ngFor="let item of todoList | async" class="todo-card_list_item">
+      <li *ngFor="let item of todoList$ | async" class="todo-card_list_item">
         <app-todo-item
           [todo]="item"
           (ItemRemove)="onItemRemove($event)"

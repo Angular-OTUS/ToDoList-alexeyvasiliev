@@ -1,15 +1,52 @@
-import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
-import { inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { TodoApiService } from '@services/todo-api.service';
+import {Todo, TodoDraft, TodoStatus} from '@interfaces/Todo';
+import {inject} from '@angular/core';
+import {BehaviorSubject, EMPTY, Observable, of, tap} from 'rxjs';
+import {TodoApiService} from '@services/todo-api.service';
 
 export class TodoStore {
+
+  private readonly toDoListSubject$ = new BehaviorSubject<Todo[]>([]);
+  readonly toDoList$ = this.toDoListSubject$.asObservable();
+
   private todoApiService = inject<TodoApiService>(TodoApiService);
-  addTodo = (todoDraft: TodoDraft): Observable<void> => this.todoApiService.addTodo(todoDraft);
-  changeTodoStatus = (id: number, newStatus: TodoStatus): Observable<void> =>
+  changeTodoStatus = (id: number, newStatus: TodoStatus): Observable<Todo> =>
     this.todoApiService.changeStatus(id, newStatus);
-  getTodos = (): Observable<Todo[]> => this.todoApiService.getAll();
+
+  getTodos(): void {
+    this.todoApiService.getAll().subscribe(todoList => this.toDoListSubject$.next(todoList));
+  }
+
+  addTodo(todoDraft: TodoDraft): void {
+    this.todoApiService.addTodo(todoDraft).subscribe((addedTodo: Todo) => {
+      this.toDoListSubject$.next([
+        ...this.toDoListSubject$.value,
+        addedTodo,
+      ]);
+    });
+  }
+
+  todoChanges(): void {
+    this.toDoListSubject$.next(this.toDoListSubject$.value);
+  }
+
+
   getTodoById = (id: number): Observable<Todo | undefined> => this.todoApiService.getById(id);
-  removeTodo = (id: number): Observable<void> => this.todoApiService.removeTodo(id);
-  saveTodo = (todo: Todo): Observable<void> => this.todoApiService.save(todo);
+  removeTodo = (id: number): Observable<void> => {
+    return this.todoApiService.removeTodo(id).pipe(
+      tap(() => {
+        this.toDoListSubject$.next([
+          ...this.toDoListSubject$.value.filter(v => v.id !== id)
+        ]);
+      })
+    )
+  };
+
+  saveTodo(todo: Todo): Observable<void> {
+    this.todoApiService.save(todo).subscribe(() => {
+      this.toDoListSubject$.next([
+        ...this.toDoListSubject$.value.filter(v => v.id !== todo.id), todo
+      ]);
+    });
+    return of(void 0);
+  }
 }

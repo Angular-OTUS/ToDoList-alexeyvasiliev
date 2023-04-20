@@ -10,10 +10,10 @@ export class TodoApiService {
   private appConfig = inject(APP_CONFIG);
 
   addTodo(todoDraft: TodoDraft) {
-    return this.httpClient.post<void>(this.appConfig.URL, todoDraft);
+    return this.httpClient.post<Todo>(this.appConfig.URL, todoDraft);
   }
   changeStatus(id: number, newStatus: TodoStatus) {
-    return this.httpClient.patch<void>(`${this.appConfig.URL}/${id}`, { status: newStatus });
+    return this.httpClient.patch<Todo>(`${this.appConfig.URL}/${id}`, { status: newStatus });
   }
   getAll(): Observable<Todo[]> {
     return this.httpClient.get<Array<Todo>>(this.appConfig.URL);

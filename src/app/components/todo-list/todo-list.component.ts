@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Todo, TodoDraft, TodoState, TodoStatus, TodoStatusState } from '@interfaces/Todo';
-import { TodoStore } from '@services/todo-store.service';
+import {Component, inject, OnInit} from '@angular/core';
+import {Todo, TodoDraft, TodoState, TodoStatus, TodoStatusState} from '@interfaces/Todo';
+import {TodoStore} from '@services/todo-store.service';
 
-import { ToastType } from '@shared/interfaces/Toast';
-import { ToastService } from '@shared/services/toast.service';
-import { Router } from '@angular/router';
-import { BehaviorSubject, map, switchMap } from 'rxjs';
+import {ToastType} from '@shared/interfaces/Toast';
+import {ToastService} from '@shared/services/toast.service';
+import {Router} from '@angular/router';
+import {BehaviorSubject, map, of, switchMap, tap} from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
@@ -13,12 +13,8 @@ import { BehaviorSubject, map, switchMap } from 'rxjs';
   styleUrls: ['./todo-list.component.scss'],
 })
 export class TodoListComponent implements OnInit {
-  get todoList(): BehaviorSubject<Todo[]> {
-    return this.#todoList$;
-  }
-
-  #todoList$ = new BehaviorSubject<Todo[]>([]);
-  isLoading$ = new BehaviorSubject(false);
+  //readonly todoList$ = new BehaviorSubject<Todo[]>([]);
+  readonly isLoading$ = new BehaviorSubject(false);
 
   selectedItemId?: number;
 
@@ -28,16 +24,21 @@ export class TodoListComponent implements OnInit {
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
 
-  private savedFilter: TodoStatusState = TodoState.All;
 
-  ngOnInit(): void {
-    this.fetchData();
-  }
+  private savFilt = new BehaviorSubject<TodoStatusState>(TodoState.All);
+  // private savedFilter: TodoStatusState = TodoState.All;
+
+
+  readonly todoList$ = this.store.toDoList$.pipe(
+    // tap(  vv => console.log("dd" , vv,  this.savFilt.value)),
+    switchMap(v =>
+      of(v.filter(t => t.status == this.savFilt.value || this.savFilt.value == TodoState.All))
+    )
+  )
 
   onItemRemove(id: number) {
     this.store.removeTodo(id).subscribe(_ => {
       this.toastService.showToast('🗑️ Задача удалена', ToastType.REMOVE);
-      this.fetchData();
       if (id === this.selectedItemId) {
         this.selectedItemId = undefined;
       }
@@ -45,31 +46,16 @@ export class TodoListComponent implements OnInit {
   }
 
   onItemAdd(todoDraft: TodoDraft) {
-    this.store.addTodo(todoDraft).subscribe(_ => {
-      this.toastService.showToast('✅ Задача добавлена', ToastType.ADD);
-      this.fetchData();
-    });
+    this.store.addTodo(todoDraft);
+    this.toastService.showToast('✅ Задача добавлена', ToastType.ADD);
   }
 
   async onItemSelected(selectedItemId: number) {
     this.selectedItemId = selectedItemId;
-    await this.router.navigate([`tasks/${selectedItemId}`], { state: {} });
+    await this.router.navigate([`tasks/${selectedItemId}`], {state: {}});
   }
 
-  private fetchData = () => {
-    this.isLoading$.next(true);
-    this.store
-      .getTodos()
-      .pipe(
-        map(val => val.filter(t => t.status == this.savedFilter || this.savedFilter == TodoState.All)),
-        switchMap(sourceValue => {
-          this.#todoList$.next(sourceValue);
-          this.isLoading$.next(false);
-          return sourceValue;
-        })
-      )
-      .subscribe();
-  };
+
   onItemEditClick = (selectedItemId: number) => {
     this.store.getTodoById(selectedItemId).subscribe(todo => {
       this.editTodo = todo;
@@ -82,25 +68,32 @@ export class TodoListComponent implements OnInit {
         status === TodoStatus.Completed ? `✔️ Задача ${idTask} выполнена` : `🚧 Задача ${idTask} на выполнении`,
         ToastType.STATUS_CHANGED
       );
-      this.fetchData();
     });
   };
 
-  onFilterChange = (filterType: TodoStatusState = this.savedFilter): void => {
-    this.savedFilter = filterType;
-    this.fetchData();
+  onFilterChange = (filterType: TodoStatusState): void => {
+    this.savFilt.next(filterType);
+    this.store.todoChanges();
   };
 
   onItemEdit(todoEdit: Todo): void {
+    console.log("onItemEdit")
     this.store
       .saveTodo(todoEdit)
       .pipe(
-        map(() => {
-          this.toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
+        tap(() => {
           this.editTodo = undefined;
-          this.fetchData();
+        }),
+        map(() => {
+
+          this.toastService.showToast('✏️ Задача обновлена', ToastType.EDIT);
+
         })
       )
       .subscribe();
+  }
+
+  ngOnInit(): void {
+    this.store.getTodos()
   }
 }
