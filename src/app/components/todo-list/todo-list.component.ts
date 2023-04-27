@@ -5,7 +5,7 @@ import { TodoStore } from '@services/todo-store.service';
 import { ToastType } from '@shared/interfaces/Toast';
 import { ToastService } from '@shared/services/toast.service';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-todo-list',
@@ -23,10 +23,14 @@ export class TodoListComponent implements OnInit {
   private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
 
-  private savedFilter$ = new BehaviorSubject<TodoStatusState>(TodoState.All);
+  private selectedFilter$ = new BehaviorSubject<TodoStatusState>(TodoState.All);
 
   readonly todoList$ = this.store.toDoList$.pipe(
-    switchMap(v => of(v.filter(t => t.status == this.savedFilter$.value || this.savedFilter$.value == TodoState.All)))
+    switchMap(todoList =>
+      this.selectedFilter$.pipe(
+        map(currFilter => todoList.filter(item => item.status === currFilter || currFilter === TodoState.All))
+      )
+    )
   );
 
   onItemRemove(id: number) {
@@ -64,7 +68,7 @@ export class TodoListComponent implements OnInit {
   };
 
   onFilterChange = (filterType: TodoStatusState): void => {
-    this.savedFilter$.next(filterType);
+    this.selectedFilter$.next(filterType);
     this.store.todoChanges();
   };
 
