@@ -4,10 +4,10 @@
     <app-todo-add-form [editTodo]="editTodo" (newItemEvent)="onItemAdd($event)" (editedItemEvent)="onItemEdit($event)">
     </app-todo-add-form>
 
-    <ul *ngIf="!isLoading" class="todo-card_list">
+    <ul *ngIf="(isLoading$ | async) === false; else loading" class="todo-card_list">
       <app-todo-filter-panel (filterEmitter)="onFilterChange($event)"></app-todo-filter-panel>
 
-      <li *ngFor="let item of items" class="todo-card_list_item">
+      <li *ngFor="let item of todoList$ | async" class="todo-card_list_item">
         <app-todo-item
           [todo]="item"
           (ItemRemove)="onItemRemove($event)"
@@ -17,8 +17,11 @@
           [selectedItemId]="selectedItemId"></app-todo-item>
       </li>
     </ul>
-    <app-loader *ngIf="isLoading"></app-loader>
   </div>
+
+  <ng-template #loading>
+    <app-loader></app-loader>
+  </ng-template>
 
   <router-outlet></router-outlet>
 </div>

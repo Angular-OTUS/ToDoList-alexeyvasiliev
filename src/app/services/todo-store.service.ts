@@ -1,39 +1,43 @@
 import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
 import { inject } from '@angular/core';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { TodoApiService } from '@services/todo-api.service';
 
-import { HttpClient } from '@angular/common/http';
-import { APP_CONFIG } from '../config/appConfig';
-import { Observable } from 'rxjs';
+export class TodoStore {
+  private readonly toDoListSubject$ = new BehaviorSubject<Todo[]>([]);
+  readonly toDoList$ = this.toDoListSubject$.asObservable();
 
-export abstract class TodoStore {
-  abstract getAll(): Observable<Todo[]>;
-  abstract getById(id: number): Observable<Todo | undefined>;
-  abstract removeTodo(id: number): Observable<void>;
-  abstract addTodo(todoDraft: TodoDraft): Observable<void>;
-  abstract save(todo: Todo): Observable<void>;
-  abstract changeStatus(id: number, newStatus: TodoStatus): Observable<void>;
-}
+  private todoApiService = inject<TodoApiService>(TodoApiService);
+  changeTodoStatus = (id: number, newStatus: TodoStatus): Observable<Todo> =>
+    this.todoApiService.changeStatus(id, newStatus);
 
-export class TodoRestStoreService extends TodoStore {
-  private httpClient = inject(HttpClient);
-  private appConfig = inject(APP_CONFIG);
-  addTodo = (todoDraft: TodoDraft): Observable<void> => {
-    return this.httpClient.post<void>(this.appConfig.URL, todoDraft);
-  };
+  getTodos(): void {
+    this.todoApiService.getAll().subscribe(todoList => this.toDoListSubject$.next(todoList));
+  }
 
-  changeStatus = (id: number, newStatus: TodoStatus): Observable<void> => {
-    return this.httpClient.patch<void>(`${this.appConfig.URL}/${id}`, { status: newStatus });
-  };
+  addTodo(todoDraft: TodoDraft): void {
+    this.todoApiService.addTodo(todoDraft).subscribe((addedTodo: Todo) => {
+      this.toDoListSubject$.next([...this.toDoListSubject$.value, addedTodo]);
+    });
+  }
 
-  getAll = (): Observable<Todo[]> => this.httpClient.get<Array<Todo>>(this.appConfig.URL);
+  todoChanges(): void {
+    this.toDoListSubject$.next(this.toDoListSubject$.value);
+  }
 
-  getById = (id: number): Observable<Todo | undefined> => this.httpClient.get<Todo>(`${this.appConfig.URL}/${id}`);
-
+  getTodoById = (id: number): Observable<Todo | undefined> => this.todoApiService.getById(id);
   removeTodo = (id: number): Observable<void> => {
-    return this.httpClient.delete<void>(`${this.appConfig.URL}/${id}`);
+    return this.todoApiService.removeTodo(id).pipe(
+      tap(() => {
+        this.toDoListSubject$.next([...this.toDoListSubject$.value.filter(v => v.id !== id)]);
+      })
+    );
   };
 
-  save = (todo: Todo): Observable<void> => {
-    return this.httpClient.patch<void>(`${this.appConfig.URL}/${todo.id}`, todo);
-  };
+  saveTodo(todo: Todo): Observable<void> {
+    this.todoApiService.save(todo).subscribe(() => {
+      this.toDoListSubject$.next([...this.toDoListSubject$.value.filter(v => v.id !== todo.id), todo]);
+    });
+    return of(void 0);
+  }
 }

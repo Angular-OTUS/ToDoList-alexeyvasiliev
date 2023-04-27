@@ -15,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TodoStore } from '@services/index';
 import { APP_CONFIG, Configuration } from './config/appConfig';
-import { TodoRestStoreService } from '@services/todo-store.service';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SharedModule } from '@shared/shared.module';
@@ -59,7 +58,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
   ],
   providers: [
-    { provide: TodoStore, useClass: TodoRestStoreService },
+    { provide: TodoStore, useClass: TodoStore },
     { provide: APP_CONFIG, useValue: Configuration },
   ],
   bootstrap: [AppComponent],
