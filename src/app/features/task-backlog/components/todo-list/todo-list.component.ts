@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Todo, TodoDraft, TodoState, TodoStatus, TodoStatusState } from '@interfaces/Todo';
 import { TodoStore } from '@services/todo-store.service';
 
-import { ToastType } from '@shared/interfaces/Toast';
-import { ToastService } from '@shared/services/toast.service';
+import { ToastType } from '../../../@shared/interfaces/Toast';
+import { ToastService } from '../../../@shared/services/toast.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map, switchMap, tap } from 'rxjs';
 

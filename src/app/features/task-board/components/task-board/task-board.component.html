@@ -1,0 +1,64 @@
+<p>task-board works!</p>
+
+<div cdkDropListGroup>
+  <div class="example-container">
+    <h2>InProgress</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="todoListNew$"
+      class="example-list"
+      (cdkDropListDropped)="drop($event, TodoStatus.New)">
+      <!--      <div class="example-box" *ngFor="let item of todo" cdkDrag>{{ item }}</div>-->
+      <ul class="todo-card_list">
+        <li
+          *ngFor="let item of todoListNew$ | async; trackBy: trackByItem"
+          cdkDrag
+          class="todo-card_list_item example-box"
+          attr.taskid="{{ item.id }}">
+          {{ item.text }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>InProgress</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="todoListInProgress$"
+      class="example-list"
+      (cdkDropListDropped)="drop($event, TodoStatus.InProgress)">
+      <!--      <div class="example-box" *ngFor="let item of todo" cdkDrag>{{ item }}</div>-->
+      <ul class="todo-card_list">
+        <li
+          *ngFor="let item of todoListInProgress$ | async; trackBy: trackByItem"
+          cdkDrag
+          class="todo-card_list_item example-box"
+          attr.taskid="{{ item.id }}">
+          {{ item.text }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="example-container">
+    <h2>Done</h2>
+
+    <div
+      cdkDropList
+      [cdkDropListData]="todoListDone$"
+      class="example-list"
+      (cdkDropListDropped)="drop($event, TodoStatus.Completed)">
+      <div
+        class="example-box"
+        *ngFor="let item of todoListDone$ | async; trackBy: trackByItem"
+        cdkDrag
+        [cdkDragData]="item"
+        attr.taskid="{{ item.id }}">
+        {{ item.text }}
+      </div>
+    </div>
+  </div>
+</div>

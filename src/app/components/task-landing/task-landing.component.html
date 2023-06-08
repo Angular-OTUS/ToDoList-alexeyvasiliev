@@ -1,0 +1,16 @@
+<div class="wrapper">
+  <header class="header">My header</header>
+
+  <aside class="sidebar">
+    <div>
+      <a [routerLink]="['/tasks']"> Task </a>
+    </div>
+    <div>
+      <a [routerLink]="['/board']"> board </a>
+    </div>
+  </aside>
+  <article class="content">
+    <router-outlet></router-outlet>
+  </article>
+  <!--  <app-todo-list class="content"></app-todo-list>-->
+</div>
