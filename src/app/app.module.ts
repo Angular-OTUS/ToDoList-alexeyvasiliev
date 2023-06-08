@@ -13,13 +13,10 @@ import { TaskBacklogModule } from './features/task-backlog/task-backlog.module';
 import { TaskLandingComponent } from '@components/task-landing/task-landing.component';
 import { TaskBoardComponent } from './features/task-board/components/task-board/task-board.component';
 import { TaskBacklogRouterModule } from './features/task-backlog-routing/task-backlog-routing.module';
+import { MatListModule } from '@angular/material/list';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tasks', pathMatch: 'full' },
-  // {
-  //   path: 'tasks',
-  //   component: TodoListComponent,
-  // },
   {
     path: 'tasks',
     loadChildren: () => TaskBacklogRouterModule,
@@ -28,7 +25,6 @@ const routes: Routes = [
     path: 'board',
     component: TaskBoardComponent,
   },
-  // { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({
@@ -40,6 +36,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     TaskBoardModule,
     TaskBacklogModule,
+    MatListModule,
   ],
   providers: [
     { provide: TodoStore, useClass: TodoStore },
