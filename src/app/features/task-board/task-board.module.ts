@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { RouterOutlet } from '@angular/router';
-
 import { SharedModule } from '../@shared/shared.module';
 import { TaskBoardComponent } from './components/task-board/task-board.component';
 import { CdkDropList, DragDropModule } from '@angular/cdk/drag-drop';

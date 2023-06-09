@@ -1,14 +1,11 @@
 <div cdkDropListGroup>
-  <app-task-board-column
-    title="New"
-    [todoListDone$]="todoListNew$"
-    [todoState]="TodoStatus.New"></app-task-board-column>
+  <app-task-board-column title="New" [todoList$]="todoListNew$" [todoState]="TodoStatus.New"></app-task-board-column>
   <app-task-board-column
     title="Progress"
-    [todoListDone$]="todoListInProgress$"
+    [todoList$]="todoListInProgress$"
     [todoState]="TodoStatus.InProgress"></app-task-board-column>
   <app-task-board-column
     title="Done"
-    [todoListDone$]="todoListDone$"
+    [todoList$]="todoListDone$"
     [todoState]="TodoStatus.Completed"></app-task-board-column>
 </div>

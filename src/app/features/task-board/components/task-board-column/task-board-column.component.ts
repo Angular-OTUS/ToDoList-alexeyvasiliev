@@ -13,7 +13,7 @@ export class TaskBoardColumnComponent {
   protected readonly TodoStatus = TodoStatus;
   private readonly store = inject(TodoStore);
   @Input()
-  todoListDone$: Observable<Todo[]> = new BehaviorSubject<Todo[]>([]);
+  todoList$: Observable<Todo[]> = new BehaviorSubject<Todo[]>([]);
 
   @Input()
   todoState!: TodoStatus;
@@ -27,7 +27,6 @@ export class TaskBoardColumnComponent {
       this.onItemStatusChanged([+id, this.todoState]);
     }
   }
-
   private onItemStatusChanged = (changeParams: [number, TodoStatus]) => {
     this.store.changeTodoStatus(changeParams[0], changeParams[1]).subscribe(_ => {
       this.store.getTodos();
