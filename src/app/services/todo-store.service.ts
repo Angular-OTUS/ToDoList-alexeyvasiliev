@@ -1,6 +1,6 @@
 import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
 import { inject } from '@angular/core';
-import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 import { TodoApiService } from '@services/todo-api.service';
 
 export class TodoStore {
@@ -8,8 +8,12 @@ export class TodoStore {
   readonly toDoList$ = this.toDoListSubject$.asObservable();
 
   private todoApiService = inject<TodoApiService>(TodoApiService);
-  changeTodoStatus = (id: number, newStatus: TodoStatus): Observable<Todo> =>
-    this.todoApiService.changeStatus(id, newStatus);
+
+  changeTodoStatus(id: number, newStatus: TodoStatus): Observable<Todo> {
+    return this.todoApiService
+      .changeStatus(id, newStatus)
+      .pipe(switchMap(() => this.todoApiService.changeStatus(id, newStatus)));
+  }
 
   getTodos(): void {
     this.todoApiService.getAll().subscribe(todoList => this.toDoListSubject$.next(todoList));

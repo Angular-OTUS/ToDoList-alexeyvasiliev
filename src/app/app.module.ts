@@ -1,61 +1,40 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import {
-  TodoAddFormComponent,
-  TodoDetailsComponent,
-  TodoHeaderComponent,
-  TodoItemComponent,
-  TodoListComponent,
-  TodoFilterPanelComponent,
-} from '@components/index';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TodoStore } from '@services/index';
 import { APP_CONFIG, Configuration } from './config/appConfig';
 import { HttpClientModule } from '@angular/common/http';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from './features/@shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
+import { TaskBoardModule } from './features/task-board/task-board.module';
+import { TaskBacklogModule } from './features/task-backlog/task-backlog.module';
+import { TaskLandingComponent } from '@components/task-landing/task-landing.component';
+import { TaskBacklogRouterModule } from './features/task-backlog-routing/task-backlog-routing.module';
+import { MatListModule } from '@angular/material/list';
+import { TaskBoardRoutingModule } from './features/task-board-routing/task-board-routing.module';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tasks', pathMatch: 'full' },
-
   {
     path: 'tasks',
-    component: TodoListComponent,
+    loadChildren: () => TaskBacklogRouterModule,
   },
   {
-    path: 'tasks/:id',
-    component: TodoListComponent,
-    children: [{ path: '', component: TodoDetailsComponent }],
+    path: 'board',
+    loadChildren: () => TaskBoardRoutingModule,
   },
-  { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TodoListComponent,
-    TodoItemComponent,
-    TodoHeaderComponent,
-    TodoAddFormComponent,
-    TodoDetailsComponent,
-    TodoFilterPanelComponent,
-  ],
+  declarations: [AppComponent, TaskLandingComponent],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
-    MatIconModule,
-    MatButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
     SharedModule,
     HttpClientModule,
-    MatButtonToggleModule,
     RouterModule.forRoot(routes),
+    TaskBoardModule,
+    TaskBacklogModule,
+    MatListModule,
   ],
   providers: [
     { provide: TodoStore, useClass: TodoStore },

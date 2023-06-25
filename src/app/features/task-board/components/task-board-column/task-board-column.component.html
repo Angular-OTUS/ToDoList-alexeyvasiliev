@@ -1,0 +1,13 @@
+<div class="task-container">
+  <h2 class="task-column-title">{{ title }} ({{ (todoList$ | async)?.length }})</h2>
+  <div cdkDropList [cdkDropListData]="todoList$" class="task-list" (cdkDropListDropped)="drop($event)">
+    <div
+      class="task-box"
+      *ngFor="let item of todoList$ | async; trackBy: trackByItem"
+      cdkDrag
+      [cdkDragData]="item"
+      attr.taskid="{{ item.id }}">
+      {{ item.id }}. {{ item.text }}
+    </div>
+  </div>
+</div>

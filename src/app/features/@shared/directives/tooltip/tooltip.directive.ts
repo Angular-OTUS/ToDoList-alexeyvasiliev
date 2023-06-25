@@ -10,7 +10,7 @@ import {
   OnDestroy,
   ViewContainerRef,
 } from '@angular/core';
-import { TooltipComponent } from '@shared/components';
+import { TooltipComponent } from '../../components';
 import { TooltipPosition } from './tooltip.enums';
 
 @Directive({

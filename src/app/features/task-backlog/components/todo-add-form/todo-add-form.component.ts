@@ -12,7 +12,7 @@ import {
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Todo, TodoDraft, TodoStatus } from '@interfaces/Todo';
-import { TooltipPosition } from '@shared/directives/tooltip/tooltip.enums';
+import { TooltipPosition } from '../../../@shared/directives/tooltip/tooltip.enums';
 
 interface TodoFormModel {
   todoTitle: AbstractControl<string | null>;

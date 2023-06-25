@@ -1,5 +1,5 @@
 import { OnDestroy } from '@angular/core';
-import { Toast, ToastType } from '@shared/interfaces/Toast';
+import { Toast, ToastType } from '../interfaces/Toast';
 import { BehaviorSubject } from 'rxjs';
 
 export class ToastService implements OnDestroy {

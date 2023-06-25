@@ -10,6 +10,7 @@ export type TodoDraft = Omit<Todo, 'id'>;
 export enum TodoStatus {
   InProgress = 'InProgress',
   Completed = 'Completed',
+  New = 'New',
 }
 
 export enum TodoState {

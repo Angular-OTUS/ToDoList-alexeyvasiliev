@@ -2,7 +2,7 @@ import { Component, ElementRef, EmbeddedViewRef, inject, OnDestroy, ViewContaine
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { ToastService } from '../../services/toast.service';
 import { Subject, takeUntil, timer } from 'rxjs';
-import { APP_CONFIG } from '../../../config/appConfig';
+import { APP_CONFIG } from '../../../../config/appConfig';
 import { ToastType } from '../../interfaces/Toast';
 import { ToastComponent } from '../index';
 

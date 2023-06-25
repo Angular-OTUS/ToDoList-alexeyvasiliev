@@ -1,0 +1,65 @@
+HTML CSS Result Skip Results Iframe EDIT ON *,
+h1,
+p {
+  margin: 0 0 1em 0;
+}
+
+.wrapper {
+  max-width: 100%;
+  // margin: 0 20px;
+  display: grid;
+  grid-gap: 1px;
+  height: 100%;
+}
+
+@media screen and (min-width: 500px) {
+  /* no grid support? */
+  .sidebar {
+    float: left;
+    width: 20%;
+  }
+
+  .content {
+    float: right;
+    width: 80%;
+  }
+
+  .wrapper {
+    margin: 0 auto;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 1fr 20fr;
+  }
+
+  .header {
+    grid-column: 1 / -1;
+    /* needed for the floated layout */
+    clear: both;
+    font-weight: bold;
+    font-size: 3rem !important;
+  }
+}
+
+.wrapper > * {
+  background-color: rgba(126, 232, 54, 0.37);
+  color: #223a41;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 150%;
+  /* needed for the floated layout*/
+  // margin-bottom: 10px;
+}
+
+/* We need to set the widths used on floated items back to auto, and remove the bottom margin as when we have grid we have gaps. */
+@supports (display: grid) {
+  .wrapper > * {
+    width: auto;
+    margin: 0;
+  }
+}
+
+.nav {
+  background-color: #9cc929;
+  margin: 10px;
+  border-radius: 10px;
+  width: 50%;
+}

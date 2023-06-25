@@ -2,7 +2,7 @@ import { AfterViewInit, Component, inject, Input, OnDestroy } from '@angular/cor
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { ToastType } from '../../interfaces/Toast';
-import { APP_CONFIG } from '../../../config/appConfig';
+import { APP_CONFIG } from '../../../../config/appConfig';
 
 @Component({
   selector: 'app-toast',

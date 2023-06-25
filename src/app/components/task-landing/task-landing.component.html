@@ -1,0 +1,13 @@
+<div class="wrapper">
+  <h1 class="header">TaskBoard</h1>
+
+  <aside class="sidebar">
+    <mat-nav-list>
+      <a mat-list-item class="nav" [routerLink]="'/tasks'"> Task </a>
+      <a mat-list-item class="nav" [routerLink]="'/board'"> Board </a>
+    </mat-nav-list>
+  </aside>
+  <article class="content">
+    <router-outlet></router-outlet>
+  </article>
+</div>
